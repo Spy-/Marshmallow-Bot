@@ -1,9 +1,7 @@
 import asyncio
-import rethinkdb as r
 
 from discord.ext import commands
 import discord
-from . import config
 from . import utilities
 
 loop = asyncio.get_event_loop()
@@ -25,44 +23,6 @@ required_tables = {
     'user_playlists': 'member_id',
     'birthdays': 'member_id'
 }
-
-
-async def db_check():
-    """Used to check if the required database/tables are setup"""
-    db_opts = config.db_opts
-
-    r.set_loop_type('asyncio')
-    # First try to connect, and see if the correct information was provided
-    try:
-        conn = await r.connect(**db_opts)
-    except r.errors.ReqlDriverError:
-        print("Cannot connect to the RethinkDB instance with the following information: {}".format(db_opts))
-
-        print("The RethinkDB instance you have setup may be down, otherwise please ensure you setup a"
-              " RethinkDB instance, and you have provided the correct database information in config.yml")
-        quit()
-        return
-
-    # Get the current databases and check if the one we need is there
-    dbs = await r.db_list().run(conn)
-    if db_opts['db'] not in dbs:
-        # If not, we want to create it
-        print('Couldn\'t find database {}...creating now'.format(db_opts['db']))
-        await r.db_create(db_opts['db']).run(conn)
-        # Then add all the tables
-        for table, key in required_tables.items():
-            print("Creating table {}...".format(table))
-            await r.table_create(table, primary_key=key).run(conn)
-        print("Done!")
-    else:
-        # Otherwise, if the database is setup, make sure all the required tables are there
-        tables = await r.table_list().run(conn)
-        for table, key in required_tables.items():
-            if table not in tables:
-                print("Creating table {}...".format(table))
-                await r.table_create(table, primary_key=key).run(conn)
-        print("Done checking tables!")
-
 
 def is_owner(ctx):
     if not hasattr(ctx.bot, "owner"):

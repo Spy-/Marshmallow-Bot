@@ -66,6 +66,8 @@ class Config:
         self.auto_playlist_file = config.get('Files', 'AutoPlaylistFile', fallback=ConfigDefaults.auto_playlist_file)
         self.auto_playlist_removed_file = None
 
+        self.description = config.get('Misc', 'Description', fallback="description")
+
         self.run_checks()
 
         self.find_autoplaylist()

@@ -4,4 +4,3 @@ from .config import *
 from .utilities import *
 from .images import create_banner
 from .paginator import Pages, CannotPaginate, DetailedPages
-from .database import DB
