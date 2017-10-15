@@ -1,4 +1,4 @@
-import sys
+''' import sys
 import inspect
 import logging
 
@@ -119,4 +119,4 @@ log.addHandler(fhandler)
 
 del _func_prototype
 del _add_logger_level
-del fhandler
+del fhandler '''

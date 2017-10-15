@@ -31,7 +31,7 @@ from .playlist import Playlist
 from .player import MusicPlayer
 from .entry import StreamPlaylistEntry
 from .opus_loader import load_opus_lib
-from .config import Config, ConfigDefaults
+from config import Config, ConfigDefaults
 from .permissions import Permissions, PermissionsDefaults
 from .constructs import SkipState, Response, VoiceStateUpdate
 from .utils import load_file, write_file, sane_round_int, fixg, ftimedelta
