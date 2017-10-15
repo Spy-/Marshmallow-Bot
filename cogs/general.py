@@ -18,7 +18,7 @@ from utilities.chat_formatting import *
 
 
 def rewrite():
-        return discord.version_info.major == 1
+    return discord.version_info.major == 1
 
 
 class General:

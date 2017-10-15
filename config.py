@@ -37,7 +37,7 @@ class Config:
         self._password = config.get('Credentials', 'Password', fallback=None)
         self._login_token = config.get('Credentials', 'Token', fallback=None)
 
-        self.auth = ()
+        self.auth = config.get('Permissions', 'OAuth', fallback=None)
 
         self.owner_id = config.get('Permissions', 'OwnerID', fallback=ConfigDefaults.owner_id)
         self.dev_ids = config.get('Permissions', 'DevIDs', fallback=ConfigDefaults.dev_ids)

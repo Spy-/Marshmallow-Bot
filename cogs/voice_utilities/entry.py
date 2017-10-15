@@ -1,26 +1,33 @@
-import os
 import asyncio
-import logging
+import json
+import os
 import traceback
+import time
+import aiohttp
 
-from enum import Enum
-from .constructs import Serializable
+from discord import Embed
+from hashlib import md5
 from .exceptions import ExtractionError
-from .utils import get_header, md5sum
-
-log = logging.getLogger(__name__)
 
 
-class EntryTypes(Enum):
-    URL = 1
-    STEAM = 2
-    FILE = 3
+async def get_header(url, headerfield=None, *, timeout=5):
+    with aiohttp.Timeout(timeout):
+        async with aiohttp.ClientSession().head(url) as response:
+            if headerfield:
+                return response.headers.get(headerfield)
+            else:
+                return response.headers
 
-    def __str__(self):
-        return self.name
+
+def md5sum(filename, limit=0):
+    fhash = md5()
+    with open(filename, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            fhash.update(chunk)
+    return fhash.hexdigest()[-limit:]
 
 
-class BasePlaylistEntry(Serializable):
+class BasePlaylistEntry:
     def __init__(self):
         self.filename = None
         self._is_downloading = False
@@ -33,13 +40,20 @@ class BasePlaylistEntry(Serializable):
 
         return bool(self.filename)
 
+    @classmethod
+    def from_json(cls, playlist, jsonstring):
+        raise NotImplementedError
+
+    def to_json(self):
+        raise NotImplementedError
+
     async def _download(self):
         raise NotImplementedError
 
     def get_ready_future(self):
         """
-        Returns a future that will fire when the song is ready to be played. The future will either fire with the result (being the entry) or an exception
-        as to why the song download failed.
+        Returns a future that will fire when the song is ready to be played. The future will either fire with the
+        result (being the entry) or an exception as to why the song download failed.
         """
         future = asyncio.Future()
         if self.is_downloaded:
@@ -78,64 +92,81 @@ class BasePlaylistEntry(Serializable):
 
 
 class URLPlaylistEntry(BasePlaylistEntry):
-    def __init__(self, playlist, url, title, duration=0, expected_filename=None, **meta):
+    def __init__(self, playlist, url, title, thumbnail, duration=0, expected_filename=None, **meta):
         super().__init__()
 
         self.playlist = playlist
         self.url = url
         self.title = title
         self.duration = duration
+        self.thumbnail = thumbnail
         self.expected_filename = expected_filename
         self.meta = meta
-
         self.download_folder = self.playlist.downloader.download_folder
 
-    def __json__(self):
-        return self._enclose_json({
+    def __str__(self):
+        fmt = '*{0}* requested by **{1.display_name}**'
+        if self.duration:
+            fmt += ' [length: {0[0]}m {0[1]}s]'.format(divmod(round(self.duration, 0), 60))
+        return fmt.format(self.title, self.requester)
+
+    @property
+    def length(self):
+        if self.duration:
+            return self.duration
+
+    @property
+    def progress(self):
+        if hasattr(self, 'start_time') and self.start_time:
+            return round(time.time() - self.start_time)
+
+    @property
+    def remaining(self):
+        length = self.length
+        progress = self.progress
+        if length and progress:
+            return length - progress
+
+    @classmethod
+    def from_json(cls, playlist, jsonstring):
+        data = json.loads(jsonstring)
+        # TODO: version check
+        url = data['url']
+        title = data['title']
+        duration = data['duration']
+        downloaded = data['downloaded']
+        filename = data['filename'] if downloaded else None
+        meta = {}
+
+        # TODO: Better [name] fallbacks
+        if 'channel' in data['meta']:
+            ch = playlist.bot.get_channel(data['meta']['channel']['id'])
+            meta['channel'] = ch or data['meta']['channel']['name']
+
+        if 'author' in data['meta']:
+            meta['author'] = meta['channel'].guild.get_member(data['meta']['author']['id'])
+
+        return cls(playlist, url, title, duration, filename, **meta)
+
+    def to_json(self):
+        data = {
             'version': 1,
+            'type': self.__class__.__name__,
             'url': self.url,
             'title': self.title,
             'duration': self.duration,
             'downloaded': self.is_downloaded,
-            'expected_filename': self.expected_filename,
             'filename': self.filename,
-            'full_filename': os.path.abspath(self.filename) if self.filename else self.filename,
             'meta': {
-                name: {
-                    'type': obj.__class__.__name__,
-                    'id': obj.id,
-                    'name': obj.name
-                } for name, obj in self.meta.items() if obj
-            }
-        })
-
-    @classmethod
-    def _deserialize(cls, data, playlist=None):
-        assert playlist is not None, cls._bad('playlist')
-
-        try:
-            # TODO: version check
-            url = data['url']
-            title = data['title']
-            duration = data['duration']
-            downloaded = data['downloaded']
-            filename = data['filename'] if downloaded else None
-            expected_filename = data['expected_filename']
-            meta = {}
-
-            # TODO: Better [name] fallbacks
-            if 'channel' in data['meta']:
-                meta['channel'] = playlist.bot.get_channel(data['meta']['channel']['id'])
-
-            if 'author' in data['meta']:
-                meta['author'] = meta['channel'].server.get_member(data['meta']['author']['id'])
-
-            entry = cls(playlist, url, title, duration, expected_filename, **meta)
-            entry.filename = filename
-
-            return entry
-        except Exception as e:
-            log.error("Could not load {}".format(cls.__name__), exc_info=e)
+                i: {
+                    'type': self.meta[i].__class__.__name__,
+                    'id': self.meta[i].id,
+                    'name': self.meta[i].name
+                } for i in self.meta
+                }
+            # Actually I think I can just getattr instead, getattr(discord, type)
+        }
+        return json.dumps(data, indent=2)
 
     # noinspection PyTypeChecker
     async def _download(self):
@@ -167,18 +198,14 @@ class URLPlaylistEntry(BasePlaylistEntry):
                         os.listdir(self.download_folder)[flistdir.index(expected_fname_noex)]
                     )
 
-                    # print("Resolved %s to %s" % (self.expected_filename, lfile))
                     lsize = os.path.getsize(lfile)
-                    # print("Remote size: %s Local size: %s" % (rsize, lsize))
 
                     if lsize != rsize:
                         await self._really_download(hash=True)
                     else:
-                        # print("[Download] Cached:", self.url)
                         self.filename = lfile
 
                 else:
-                    # print("File not found in cache (%s)" % expected_fname_noex)
                     await self._really_download(hash=True)
 
             else:
@@ -192,15 +219,10 @@ class URLPlaylistEntry(BasePlaylistEntry):
 
                 if expected_fname_base in ldir:
                     self.filename = os.path.join(self.download_folder, expected_fname_base)
-                    log.info("Download cached: {}".format(self.url))
 
                 elif expected_fname_noex in flistdir:
-                    log.info("Download cached (different extension): {}".format(self.url))
                     self.filename = os.path.join(self.download_folder, ldir[flistdir.index(expected_fname_noex)])
-                    log.debug("Expected {}, got {}".format(
-                        self.expected_filename.rsplit('.', 1)[-1],
-                        self.filename.rsplit('.', 1)[-1]
-                    ))
+
                 else:
                     await self._really_download()
 
@@ -216,17 +238,13 @@ class URLPlaylistEntry(BasePlaylistEntry):
 
     # noinspection PyShadowingBuiltins
     async def _really_download(self, *, hash=False):
-        log.info("Download started: {}".format(self.url))
 
         try:
             result = await self.playlist.downloader.extract_info(self.playlist.loop, self.url, download=True)
         except Exception as e:
             raise ExtractionError(e)
 
-        log.info("Download complete: {}".format(self.url))
-
         if result is None:
-            log.critical("YTDL has failed, everyone panic")
             raise ExtractionError("ytdl broke and hell if I know why")
             # What the fuck do I do now?
 
@@ -243,82 +261,19 @@ class URLPlaylistEntry(BasePlaylistEntry):
                 # Move the temporary file to it's final location.
                 os.rename(unhashed_fname, self.filename)
 
-
-class StreamPlaylistEntry(BasePlaylistEntry):
-    def __init__(self, playlist, url, title, *, destination=None, **meta):
-        super().__init__()
-
-        self.playlist = playlist
-        self.url = url
-        self.title = title
-        self.destination = destination
-        self.duration = 0
-        self.meta = meta
-
-        if self.destination:
-            self.filename = self.destination
-
-    def __json__(self):
-        return self._enclose_json({
-            'version': 1,
-            'url': self.url,
-            'filename': self.filename,
-            'title': self.title,
-            'destination': self.destination,
-            'meta': {
-                name: {
-                    'type': obj.__class__.__name__,
-                    'id': obj.id,
-                    'name': obj.name
-                } for name, obj in self.meta.items() if obj
-            }
-        })
-
-    @classmethod
-    def _deserialize(cls, data, playlist=None):
-        assert playlist is not None, cls._bad('playlist')
-
-        try:
-            # TODO: version check
-            url = data['url']
-            title = data['title']
-            destination = data['destination']
-            filename = data['filename']
-            meta = {}
-
-            # TODO: Better [name] fallbacks
-            if 'channel' in data['meta']:
-                ch = playlist.bot.get_channel(data['meta']['channel']['id'])
-                meta['channel'] = ch or data['meta']['channel']['name']
-
-            if 'author' in data['meta']:
-                meta['author'] = meta['channel'].server.get_member(data['meta']['author']['id'])
-
-            entry = cls(playlist, url, title, destination=destination, **meta)
-            if not destination and filename:
-                entry.filename = destination
-
-            return entry
-        except Exception as e:
-            log.error("Could not load {}".format(cls.__name__), exc_info=e)
-
-    # noinspection PyMethodOverriding
-    async def _download(self, *, fallback=False):
-        self._is_downloading = True
-
-        url = self.destination if fallback else self.url
-
-        try:
-            result = await self.playlist.downloader.extract_info(self.playlist.loop, url, download=False)
-        except Exception as e:
-            if not fallback and self.destination:
-                return await self._download(fallback=True)
-
-            raise ExtractionError(e)
-        else:
-            self.filename = result['url']
-            # I might need some sort of events or hooks or shit
-            # for when ffmpeg inevitebly fucks up and i have to restart
-            # although maybe that should be at a slightly lower level
-        finally:
-            self._is_downloading = False
+    def to_embed(self):
+        """Returns an embed that can be used to display information about this particular song"""
+        # Create the embed object we'll use
+        embed = Embed()
+        # Fill in the simple things
+        embed.add_field(name='Title', value=self.title, inline=False)
+        embed.add_field(name='Requester', value=self.requester.display_name, inline=False)
+        if self.thumbnail:
+            embed.set_thumbnail(url=self.thumbnail)
+        # Get the current length of the song and display this
+        if self.length:
+            length = divmod(round(self.length, 0), 60)
+            fmt = "{0[0]}m {0[1]}s".format(length)
+            embed.add_field(name='Duration', value=fmt, inline=False)
+        # And return the embed we created
+        return embed
