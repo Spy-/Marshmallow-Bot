@@ -1,73 +1,110 @@
 from discord.ext import commands
+import discord.utils
+from .config import Config, ConfigDefaults
 
-# The permission system of the bot is based on a "just works" basis
-# You have permissions and the bot has permissions. If you meet the permissions
-# required to execute the command (and the bot does as well) then it goes through
-# and you can execute the command.
-# Certain permissions signify if the person is a moderator (Manage Server) or an
-# admin (Administrator). Having these signify certain bypasses.
-# Of course, the owner will always be able to execute commands.
+config = Config(ConfigDefaults.options_file)
 
-async def check_permissions(ctx, perms, *, check=all):
-    is_owner = await ctx.bot.is_owner(ctx.author)
-    if is_owner:
+def is_owner_check(ctx):
+    return ctx.message.author.id == 203297462746611712
+
+
+def is_owner():
+    return commands.check(is_owner_check)
+
+''' def check_permissions(ctx, perms):
+    if is_owner_check(ctx):
         return True
-
-    resolved = ctx.channel.permissions_for(ctx.author)
-    return check(getattr(resolved, name, None) == value for name, value in perms.items())
-
-def has_permissions(*, check=all, **perms):
-    async def pred(ctx):
-        return await check_permissions(ctx, perms, check=check)
-    return commands.check(pred)
-
-async def check_guild_permissions(ctx, perms, *, check=all):
-    is_owner = await ctx.bot.is_owner(ctx.author)
-    if is_owner:
-        return True
-
-    if ctx.guild is None:
+    elif not perms:
         return False
 
-    resolved = ctx.author.guild_permissions
-    return check(getattr(resolved, name, None) == value for name, value in perms.items())
+    ch = ctx.message.channel
+    author = ctx.message.author
+    resolved = ch.permissions_for(author)
+    return all(getattr(resolved, name, None) == value for name, value in perms.items()) '''
 
-def has_guild_permissions(*, check=all, **perms):
-    async def pred(ctx):
-        return await check_guild_permissions(ctx, perms, check=check)
-    return commands.check(pred)
+def check_permissions(**perms):
+    def predicate(ctx):
+        # Return true if this is a private channel, we'll handle that in the registering of the command
+        if type(ctx.message.channel) is discord.DMChannel:
+            return True
 
-# These do not take channel overrides into account
+        # Get the member permissions so that we can compare
+        guild_perms = ctx.message.author.guild_permissions
+        channel_perms = ctx.message.author.permissions_in(ctx.message.channel)
+        # Currently the library doesn't handle administrator overrides..so lets do this manually
+        if guild_perms.administrator:
+            return True
+        # Next, set the default permissions if one is not used, based on what was passed
+        # This will be overriden later, if we have custom permissions
+        required_perm = discord.Permissions.none()
+        for perm, setting in perms.items():
+            setattr(required_perm, perm, setting)
 
-def is_mod():
-    async def pred(ctx):
-        return await check_guild_permissions(ctx, {'manage_guild': True})
-    return commands.check(pred)
+        required_perm_value = ctx.bot.db.load('server_settings', key=ctx.message.guild.id, pluck='permissions') or {}
+        required_perm_value = required_perm_value.get(ctx.command.qualified_name)
+        if required_perm_value:
+            required_perm = discord.Permissions(required_perm_value)
 
-def is_admin():
-    async def pred(ctx):
-        return await check_guild_permissions(ctx, {'administrator': True})
-    return commands.check(pred)
+        # Now just check if the person running the command has these permissions
+        return guild_perms >= required_perm or channel_perms >= required_perm
+
+    predicate.perms = perms
+    return commands.check(predicate)
+
+
+def role_or_permissions(ctx, check, **perms):
+    if check_permissions(**perms):
+        return True
+
+    ch = ctx.message.channel
+    author = ctx.message.author
+    if ch.is_private:
+        return False  # can't have roles in PMs
+
+    role = discord.utils.find(check, author.roles)
+    return role is not None
+
 
 def mod_or_permissions(**perms):
-    perms['manage_guild'] = True
-    async def predicate(ctx):
-        return await check_guild_permissions(ctx, perms, check=any)
+    def predicate(ctx):
+        server = ctx.message.server
+        mod_role = config.mod_role.lower()
+        admin_role = config.admin_role.lower()
+        return role_or_permissions(ctx, lambda r: r.name.lower() in (mod_role, admin_role), **perms)
+
     return commands.check(predicate)
+
 
 def admin_or_permissions(**perms):
-    perms['administrator'] = True
-    async def predicate(ctx):
-        return await check_guild_permissions(ctx, perms, check=any)
-    return commands.check(predicate)
-
-def is_in_guilds(*guild_ids):
     def predicate(ctx):
-        guild = ctx.guild
-        if guild is None:
-            return False
-        return guild.id in guild_ids
+        server = ctx.message.server
+        admin_role = config.admin_role
+        return role_or_permissions(ctx, lambda r: r.name.lower() == admin_role.lower(), **perms)
+
     return commands.check(predicate)
 
-def is_lounge_cpp():
-    return is_in_guilds(145079846832308224)
+
+def serverowner_or_permissions(**perms):
+    def predicate(ctx):
+        if ctx.message.server is None:
+            return False
+        server = ctx.message.server
+        owner = server.owner
+
+        if ctx.message.author.id == owner.id:
+            return True
+
+        return check_permissions(**perms)
+    return commands.check(predicate)
+
+
+def serverowner():
+    return serverowner_or_permissions()
+
+
+def admin():
+    return admin_or_permissions()
+
+
+def mod():
+    return mod_or_permissions()

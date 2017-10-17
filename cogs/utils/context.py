@@ -83,7 +83,6 @@ class Context(commands.Context):
 
     async def prompt(self, message, *, timeout=60.0, delete_after=True, reacquire=True, author_id=None):
         """An interactive reaction confirmation dialog.
-
         Parameters
         -----------
         message: str
@@ -98,7 +97,6 @@ class Context(commands.Context):
         author_id: Optional[int]
             The member who should respond to the prompt. Defaults to the author of the
             Context's message.
-
         Returns
         --------
         Optional[bool]
@@ -167,12 +165,9 @@ class Context(commands.Context):
 
     def acquire(self, *, timeout=None):
         """Acquires a database connection from the pool. e.g. ::
-
             async with ctx.acquire():
                 await ctx.db.execute(...)
-
         or: ::
-
             await ctx.acquire()
             try:
                 await ctx.db.execute(...)
@@ -183,10 +178,8 @@ class Context(commands.Context):
 
     async def release(self):
         """Releases the database connection from the pool.
-
         Useful if needed for "long" interactive commands where
         we want to release the connection and re-acquire later.
-
         Otherwise, this is called automatically by the bot.
         """
         # from source digging asyncpg source, releasing an already
@@ -198,7 +191,6 @@ class Context(commands.Context):
 
     async def show_help(self, command=None):
         """Shows the help command for the specified command if given.
-
         If no command is given, then it'll show help for the current
         command.
         """
