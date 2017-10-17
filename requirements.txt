@@ -1,8 +1,13 @@
 git+https://github.com/Rapptz/discord.py@rewrite#egg=discord.py[voice]
 lxml
-psutil
-asyncpg>=0.12.0
 click
-parsedatetime
+psutil
 lru_dict
+youtube-dl
+Pillow==4.2.0
+parsedatetime
+asyncpg>=0.12.0
+pendulum==1.2.0
 python-dateutil
+ruamel.yaml==0.14.12
+beautifulsoup4==4.6.0
