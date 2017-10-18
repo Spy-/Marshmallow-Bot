@@ -23,16 +23,16 @@
 ### ADMINISTRATION
 Commands | Description | Example
 ----------|-------------|--------
-`?announce` | Announces a message to every server that Sigma is connected to. Servers can opt out of this with the noannouncements command. (Bot Owner Only) | `?announce Hello world!`
+`?announce` | Announces a message to every server that Marshmallow Man is connected to. Servers can opt out of this with the noannouncements command. (Bot Owner Only) | `?announce Hello world!`
 `?blacklistmodule` `?blackmodule` `?blackmdl` | Disallows a person from using a specific module category. (Bot Owner Only) | `?blacklistmodule 0123456789 minigames`
 `?blacklistserver` `?blacklistguild` `?blacksrv` `?blackguild` | Marks a server as blacklisted. This disallows any user on that server from using commands. (Bot Owner Only) | `?blacklistserver 0123456789`
 `?blacklistuser` `?blackusr` | Marks a user as blacklisted, disallowing them to use any command. (Bot Owner Only) | `?blacklistuser 0123456789`
-`?eject` | Makes Sigma leave a Discord server. (Bot Owner Only) | `?eject 0123456789`
+`?eject` | Makes Marshmallow Man leave a Discord server. (Bot Owner Only) | `?eject 0123456789`
 `?evaluate` `?evaluate` `?eval` `?py` `?python` `?code` `?exec` | Executes raw python code. This should be used with caution. (Bot Owner Only) | `?evaluate print('hello world')`
 `?geterror` | Gets an error's details using the given token. (Bot Owner Only) | `?geterror 9a2e9a374ac90294f225782f362e2ab1`
 `?givecurrency` `?givekud` `?givemoney` | Awards the mentioned user with the inputted amount of currency. The currency goes first and then the user mention as shown in the example. (Bot Owner Only) | `?givecurrency 150 @person`
 `?giveitem` | Creates and gives an item to the tagged user from the inputted category. (Bot Owner Only) | `?giveitem @person plants Blue Delta`
-`?reload` | Reloads all of the modules in Sigma. This includes both commands and events. (Bot Owner Only) | `?reload`
+`?reload` | Reloads all of the modules in Marshmallow Man. This includes both commands and events. (Bot Owner Only) | `?reload`
 `?send` | Sends a message to a user, channel or server. The first argument needs to be the destination parameter. The destination parameter consists of the destination type and ID. The types are U for User and C for Channel. The type and ID are separated by a colon, or two dots put more simply. (Bot Owner Only) | `?send u:0123456789 We are watching...`
 `?setavatar` | Sets the avatar of the bot either to the linked or attached image. The officially supported formats for bot avatars are JPG and PNG images. Note that bots, like all users, have limited profile changes per time period. (Bot Owner Only) | `?setavatar https://my_fomain.net/my_avatar.png`
 `?setstatus` | Sets the current playing status of the bot. To use this, the automatic status rotation needs to be disabled. It can be toggled with the togglestatus command. (Bot Owner Only) | `?setstatus with fishies`
@@ -153,7 +153,7 @@ Commands | Description | Example
 Commands | Description | Example
 ----------|-------------|--------
 `?animechargame` `?anichargame` `?anicg` | A minigame where you guess the name of the anime character shown. You can add "hint" in the command to make it show the character's scrambled name. The Kud reward is equal to the number of characters of the shortest part of the characters name. If the hint is used, the Kud reward is split in half. | `?animechargame hint`
-`?buyupgrade` `?shop` | Opens Sigma's profession upgrade shop. | `?buyupgrade`
+`?buyupgrade` `?shop` | Opens Marshmallow Man's profession upgrade shop. | `?buyupgrade`
 `?coinflip` `?cf` | Flips a coin. Nothing complex. You can try guessing the results by typing either Heads or Tails. | `?coinflip Heads`
 `?eightball` `?8ball` | The 8Ball has answers to ALL your questions. Come one, come all, and ask the mighty allknowing 8Ball! Provide a question at the end of the command and await the miraculous answer! | `?eightball Will I ever be pretty?`
 `?filtersell` `?fsell` | Sells all items that have a certain attribute. The accepted attributes are name, type and rarity. | `?filtersell rarity:Legendary`
@@ -211,7 +211,7 @@ Commands | Description | Example
 Commands | Description | Example
 ----------|-------------|--------
 `?disconnect` `?stop` | Stops the music, disconnects the bot from the current voice channel, and purges the music queue. | `?disconnect`
-`?musicoverride` `?overridemusic` `?musickill` `?killmusic` | Overrides the current music player in instances where sigma is stuck in a channel. This will not purge the queue, just disconnect the bot. | `?musicoverride`
+`?musicoverride` `?overridemusic` `?musickill` `?killmusic` | Overrides the current music player in instances where Marshmallow Man is stuck in a channel. This will not purge the queue, just disconnect the bot. | `?musicoverride`
 `?nowplaying` `?currentsong` `?playing` `?np` | Shows information regarding the currently playing song. | `?nowplaying`
 `?play` `?start` | Starts playing the music queue. | `?play`
 `?queue` `?add` | Queues up a song to play from YouTube. Either from a direct URL or text search. Playlists are supported but take a long time to process. | `?queue Kaskade Disarm You Illenium Remix`
@@ -284,7 +284,7 @@ Commands | Description | Example
 `?bye` `?goodbye` | Toggles if the bot should say when users leave the server. The goodbye feature is active by default. | `?bye`
 `?byechannel` `?byech` | Sets the channel the goodbye messages should be sent to. Of course unless byedm is active. | `?byechannel #welcome`
 `?byemessage` `?byemsg` | This sets the message shown on the server when a member leaves. There are certain syntaxes for controlling what is displayed. {user_name} - Basic text of the leaving user's name. {user_discriminator} - The numbers after the # in the user's name. {user_mention} - A mention tag of the leaving user. {user_id} - The leaving user's discord ID. {server_name} - Text showing the server's name. {server_id} - The server's discord ID. {owner_name} - Basic text showing the name of the server owner. {owner_discriminator} - The numbers after the # in the owner's name. {owner_mention} - A mention tag of the server's owner. {owner_id} - The server owner's discord ID.  | `?byemessage Hello {user_mention}, welcome to {server_name}!`
-`?chatterbot` | Toggles if the Chatterbot functions should be active. If active, when a message starts with a mention of Sigma, she will respond. This setting is active by default. | `?chatterbot`
+`?chatterbot` | Toggles if the Chatterbot functions should be active. If active, when a message starts with a mention of Marshmallow Man, she will respond. This setting is active by default. | `?chatterbot`
 `?deletecommands` `?delcmds` | Toggles if messages that are a command should be automatically deleted. | `?deletecommands`
 `?greet` | Toggles if the bot should greet users when they enter the server. The greeting feature is active by default. | `?greet`
 `?greetchannel` `?greetch` | Sets the channel the greeting messages should be sent to, unless greetdm is active. | `?greetchannel #welcome`
@@ -292,22 +292,22 @@ Commands | Description | Example
 `?greetmessage` `?greetmsg` | This sets the message shown to joining members when they enter server. There are certain syntaxes for controlling what is displayed. {user_name} - Basic text of the joining user's name. {user_discriminator} - The numbers after the # in the user's name. {user_mention} - A mention tag of the joining user. {user_id} - The joining user's discord ID. {server_name} - Text showing the server's name. {server_id} - The server's discord ID. {owner_name} - Basic text showing the name of the server owner. {owner_discriminator} - The numbers after the # in the owner's name. {owner_mention} - A mention tag of the server's owner. {owner_id} - The server owner's discord ID.  | `?greetmessage Hello {user_mention}, welcome to {server_name}!`
 `?logedits` | Toggles if message editing should be logged in the server's logging channel. | `?logedits`
 `?loggingchannel` `?logchannel` `?logch` | Designates a channel where server events will be logged to. The stuff that is logged is member movement and moderator actions. Such as warns, bans, muting members and pruning channels. To disable the logging channel, input "disable" as the channel argument. | `?loggingchannel #logging`
-`?prefix` | Sets the prefix that Sigma should respond to. This will be bound to your server and you can set it to anything you'd like. However, the prefix can not contain spaces. They will be automatically removed. | `?prefix !!`
+`?prefix` | Sets the prefix that Marshmallow Man should respond to. This will be bound to your server and you can set it to anything you'd like. However, the prefix can not contain spaces. They will be automatically removed. | `?prefix !!`
 `?removecommand` `?remcmd` | Removes a custom command trigger used for custom commands from the server. Command requires the Manage Server permission. | `?removecommand hi`
 `?unblockwords` `?unblockword` | Removes a blocked word allowing people to send messages containing it. | `?unblockwords boobs`
-`?unflip` | Toggles if Sigma should respond to tables being flipped. | `?unflip`
+`?unflip` | Toggles if Marshmallow Man should respond to tables being flipped. | `?unflip`
 [Back To Top](#module-index)
 
 ### STATISTICS
 Commands | Description | Example
 ----------|-------------|--------
-`?experience` `?activity` `?level` `?exp` `?xp` | Shows how much of Sigma's internal experience you obtained. Experience is earned by being an active member of the community. Yes, this is meant to be vague. | `?experience @person`
-`?profile` `?mystats` | Shows Sigma's statistics for the mentioned user. Their current experience, level and most used commands. | `?profile @person`
+`?experience` `?activity` `?level` `?exp` `?xp` | Shows how much of Marshmallow Man's internal experience you obtained. Experience is earned by being an active member of the community. Yes, this is meant to be vague. | `?experience @person`
+`?profile` `?mystats` | Shows Marshmallow Man's statistics for the mentioned user. Their current experience, level and most used commands. | `?profile @person`
 `?topcommands` `?topcmds` | Shows the top 20 most used commands globally. | `?topcommands`
 `?topcookies` | Shows the top 20 users who have the most cookies. | `?topcookies`
 `?topcurrency` `?topkud` | Shows the top 10 people in the Kud leaderboards. You can specify if you want to see the top people that are local, global, or by their current kud. The leaderboard shows the local server's leaderboard by default. | `?topcurrency global`
 `?topexperience` `?topxp` | Shows the top 10 people in the Experience leaderboards. You can specify if you want to see the top people that are local, global, or by their current xp. The leaderboard shows the local server's leaderboard by default. | `?topexperience local`
-`?wallet` `?currency` `?money` `?kud` | Shows how much of Sigma's internal currency you currently have. As well as how much you've earned on the current server and in total. Kud is earned by being an active member of the community. Yes, this is meant to be vague. | `?wallet @person`
+`?wallet` `?currency` `?money` `?kud` | Shows how much of Marshmallow Man's internal currency you currently have. As well as how much you've earned on the current server and in total. Kud is earned by being an active member of the community. Yes, this is meant to be vague. | `?wallet @person`
 [Back To Top](#module-index)
 
 ### UTILITY
@@ -326,9 +326,9 @@ Commands | Description | Example
 `?servericon` `?srvicon` `?icon` | Shows the server's icon image. | `?servericon`
 `?serverid` `?guildid` `?srvid` `?sid` `?gid` | Shows the Server ID of the server the command is used in. | `?serverid`
 `?serverinformation` `?serverinfo` `?sinfo` | Shows information and data about the server that the command is used in. | `?serverinformation`
-`?shortenurl` `?shorten` `?bitly` | Shortens a URL for you using BitLy. All URLs returned via Sigma are without ads, merely shortened using the service. | `?shortenurl https://i.redd.it/ngwebbf5nwfz.jpg`
-`?statistics` `?stats` | Shows Sigma's current statistics. Population, message and command counts, and rates since startup. As well as when the bot last started. | `?statistics`
-`?status` | Shows the status of Sigma's machine. Processor information, memory, storage, network, etc. | `?status`
+`?shortenurl` `?shorten` `?bitly` | Shortens a URL for you using BitLy. All URLs returned via Marshmallow Man are without ads, merely shortened using the service. | `?shortenurl https://i.redd.it/ngwebbf5nwfz.jpg`
+`?statistics` `?stats` | Shows Marshmallow Man's current statistics. Population, message and command counts, and rates since startup. As well as when the bot last started. | `?statistics`
+`?status` | Shows the status of Marshmallow Man's machine. Processor information, memory, storage, network, etc. | `?status`
 `?userid` `?uid` | Shows the User ID of the mentioned user. If no user is mentioned, it will show the author's ID. If you don't want the return message to be an embed, add "text" at the end. | `?userid @person`
 `?userinformation` `?userinfo` `?uinfo` | Shows information and data about the mentioned user. If no user is mentioned, it will show data for the message author. | `?userinformation @person`
 `?whoplays` | Generates a list of users playing the inputted game. | `?whoplays Overwatch`
