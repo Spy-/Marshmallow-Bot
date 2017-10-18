@@ -383,8 +383,8 @@ class Music:
                 await channel.connect()
 
             # If we have connnected, create our voice state
-            queue_type = "user" #self.bot.db.load('server_settings', key=channel.guild.id, pluck='queue_type')
-            volume = config.default_volume #self.bot.db.load('server_settings', key=channel.guild.id, pluck='volume')
+            queue_type = self.bot.db.load('server_settings', key=channel.guild.id, pluck='queue_type')
+            volume = self.bot.db.load('server_settings', key=channel.guild.id, pluck='volume')
             user_queue = queue_type == "user"
             self.voice_states[channel.guild.id] = VoiceState(channel.guild, self.bot, user_queue=user_queue, volume=volume)
 
@@ -602,7 +602,7 @@ class Music:
         else:
             state.volume = value
             entry = {'server_id': str(ctx.message.guild.id), 'volume': value}
-            #self.bot.db.save('server_settings', entry)
+            self.bot.db.save('server_settings', entry)
             await ctx.send('Set the volume to {:.0%}'.format(state.volume))
 
     @commands.command()

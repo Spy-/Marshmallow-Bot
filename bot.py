@@ -161,6 +161,10 @@ def load_credentials():
 if __name__ == '__main__':
     bot.commands_used = Counter()
     bot.remove_command('help')
+
+    bot.loop.create_task(utils.db_check())
+    bot.db = utils.DB()
+
     print('------------------------------------')
     for extension in extensions:
         try:

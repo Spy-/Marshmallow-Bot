@@ -57,7 +57,7 @@ class DJ(Playlist):
         return None
 
     async def resolve_playlist(self):
-        self.playlists = self.bot.db.load('user_playlists', key=self.member.id, pluck='playlists') or []
+        self.playlists = []
         self.clear()
 
         for pl in self.playlists:
