@@ -1,4 +1,5 @@
 **Hey there!** These are all of the commands plus descriptions of things that this bot *has* or *will have*.
+Everything here is subject to change
 
 ## Module Index
 - [ADMINISTRATION](#administration)
@@ -11,8 +12,6 @@
 - [MISCELANOUS](#miscelanous)
 - [MODERATION](#moderation)
 - [MUSIC](#music)
-- [NIHONGO](#nihongo)
-- [NSFW](#nsfw)
 - [PERMISSIONS](#permissions)
 - [ROLES](#roles)
 - [SEARCHES](#searches)
