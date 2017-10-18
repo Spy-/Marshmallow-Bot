@@ -1,5 +1,7 @@
 audio_cache/
+audio_tmp/
 logs/
+rethinkdb_data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
