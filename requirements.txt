@@ -3,6 +3,7 @@ lxml
 click
 psutil
 lru_dict
+rethinkdb
 youtube-dl
 Pillow==4.2.0
 parsedatetime
