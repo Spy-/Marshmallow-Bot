@@ -74,7 +74,7 @@ class Playlist:
         # Simply get the database entry for this user's playlist
         key = str(author.id)
         playlist = playlist.lower().strip()
-        playlists = []#self.bot.db.load('user_playlists', key=key, pluck='playlists') or []
+        playlists = self.bot.db.load('user_playlists', key=key, pluck='playlists') or []
 
         entry = await self.get_info(url)
 
@@ -89,7 +89,7 @@ class Playlist:
                         'member_id': key,
                         'playlists': playlists
                     }
-                    #self.bot.db.save('user_playlists', update)
+                    self.bot.db.save('user_playlists', update)
                     await self.update_dj_for_member(author)
                     return True
 
@@ -98,7 +98,7 @@ class Playlist:
         key = str(author.id)
         old_name = old_name.lower().strip()
         new_name = new_name.lower().strip()
-        playlists = []#self.bot.db.load('user_playlists', key=key, pluck='playlists') or []
+        playlists = self.bot.db.load('user_playlists', key=key, pluck='playlists') or []
 
         # Find the playlist that matches the old name
         for pl in playlists:
@@ -117,7 +117,7 @@ class Playlist:
         # Simply get the database entry for this user's playlist
         key = str(author.id)
         playlist = playlist.lower().strip()
-        playlists = []#self.bot.db.load('user_playlists', key=key, pluck='playlists') or []
+        playlists = self.bot.db.load('user_playlists', key=key, pluck='playlists') or []
 
         # Loop through till we find the playlist that matches
         for pl in playlists:
@@ -129,7 +129,7 @@ class Playlist:
                     'member_id': key,
                     'playlists': playlists
                 }
-                #self.bot.db.save('user_playlists', update)
+                self.bot.db.save('user_playlists', update)
                 await self.update_dj_for_member(author)
                 return song
 

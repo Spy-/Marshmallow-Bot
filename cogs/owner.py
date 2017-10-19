@@ -2,13 +2,9 @@ from discord.ext import commands
 
 from .utils import checks
 
-import re
-import glob
 import asyncio
-import aiohttp
 import discord
 import inspect
-import pendulum
 import textwrap
 import traceback
 from contextlib import redirect_stdout
@@ -66,8 +62,6 @@ class Owner:
         await self.bot.owner.send(embed=embed)
 
     async def on_guild_remove(self, guild):
-        # I don't want this for now
-        return
         # Create our embed that we'll use for the information
         embed = discord.Embed(title="Left guild {}".format(guild.name), description="Created on: {}".format(guild.created_at.date()))
 
@@ -274,6 +268,8 @@ class Owner:
         await self.bot.change_presence(game=discord.Game(name=status, type=0))
         await ctx.send("Just changed my status to '{}'!".format(status))
 
+    
+
     @commands.command()
     @checks.is_owner()
     async def load(self, ctx, *, module: str):
@@ -323,6 +319,19 @@ class Owner:
         except Exception as error:
             fmt = 'An error occurred while processing this request: ```py\n{}: {}\n```'
             await ctx.send(fmt.format(type(error).__name__, error))
+
+    @commands.command()
+    @checks.is_owner()
+    async def nickname(self, ctx, *, nickname=""):
+        """Sets Bot's nickname Leaving this empty will remove it."""
+        nickname = nickname.strip()
+        if nickname == "":
+            nickname = None
+        try:
+            await self.bot.change_nickname(ctx.message.server.me, nickname)
+            await ctx.send("Done.")
+        except discord.Forbidden:
+            await ctx.send("I cannot do that, I lack the \"Change Nickname\" permission.")
 
 
 def setup(bot):

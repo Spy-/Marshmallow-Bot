@@ -3,7 +3,6 @@ import traceback
 import datetime
 import logging
 import asyncio
-import copy
 import json
 import sys
 import os
@@ -19,7 +18,8 @@ discord_logger = logging.getLogger('discord')
 discord_logger.setLevel(logging.CRITICAL)
 log = logging.getLogger()
 log.setLevel(logging.INFO)
-handler = logging.FileHandler(filename='marshmallow.log', encoding='utf-8', mode='w')
+handler = logging.FileHandler(
+    filename='marshmallow.log', encoding='utf-8', mode='w')
 log.addHandler(handler)
 
 
@@ -30,8 +30,9 @@ extensions = [
     'cogs.meta',
     'cogs.misc',
     'cogs.owner',
-    'cogs.music'
-    #'cogs.playlist',
+    'cogs.music',
+    'cogs.playlist',
+    'cogs.stats'
 ]
 
 opts = {'command_prefix': config.command_prefix,
@@ -76,6 +77,13 @@ async def on_ready():
 
 
 @bot.event
+async def on_message(message):
+    if message.author.bot or utils.should_ignore(bot, message):
+        return
+    await bot.process_commands(message)
+
+
+@bot.event
 async def on_member_ban(guild, user):
     for channel in guild.channels:
         if channel.name == "banlogs":
@@ -84,11 +92,38 @@ async def on_member_ban(guild, user):
 
 
 @bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
+async def on_command_completion(ctx):
+    # There's no reason to continue waiting for this to complete, so lets immediately launch this in a new future
+    bot.loop.create_task(process_command(ctx))
 
-    await bot.process_commands(message)
+
+async def process_command(ctx):
+    author = ctx.message.author
+    server = ctx.message.guild
+    command = ctx.command
+
+    command_usage = await bot.db.actual_load('command_usage', key=command.qualified_name) or \
+        {'command': command.qualified_name}
+
+    # Add one to the total usage for this command, basing it off 0 to start with (obviously)
+    total_usage = command_usage.get('total_usage', 0) + 1
+    command_usage['total_usage'] = total_usage
+
+    # Add one to the author's usage for this command
+    total_member_usage = command_usage.get('member_usage', {})
+    member_usage = total_member_usage.get(str(author.id), 0) + 1
+    total_member_usage[str(author.id)] = member_usage
+    command_usage['member_usage'] = total_member_usage
+
+    # Add one to the server's usage for this command
+    if ctx.message.guild is not None:
+        total_server_usage = command_usage.get('server_usage', {})
+        server_usage = total_server_usage.get(str(server.id), 0) + 1
+        total_server_usage[str(server.id)] = server_usage
+        command_usage['server_usage'] = total_server_usage
+
+    # Save all the changes
+    bot.db.save('command_usage', command_usage)
 
 
 @bot.event
@@ -114,7 +149,8 @@ async def on_command_error(ctx, error):
         traceback.print_tb(error.original.__traceback__)
         print('{0.__class__.__name__}: {0}'.format(
             error.original), file=sys.stderr)
-        e = discord.Embed(title='Inkx! I have encountered an Error!', color=0xcc6600)
+        e = discord.Embed(
+            title='Inkx! I have encountered an Error!', color=0xcc6600)
         e.add_field(name='Invoke', value=error)
         e.description = '```py\nIn {0.command.qualified_name}:\n```'.format(
             ctx) + '{0.__class__.__name__}: {0}'.format(error.original)
@@ -136,7 +172,8 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_error(event, *args, **kwargs):
-    e = discord.Embed(title='Zoinks! I have encountered an Error!', color=0xcc6600)
+    e = discord.Embed(
+        title='Zoinks! I have encountered an Error!', color=0xcc6600)
     e.add_field(name='Event', value=event)
     e.description = f'```py\n{traceback.format_exc()}\n```'
     e.timestamp = datetime.datetime.utcnow()
@@ -171,7 +208,8 @@ if __name__ == '__main__':
             bot.load_extension(extension)
             print('Loaded {} extension.'.format(extension))
         except Exception as e:
-            print('Failed to load extension {}\n{}: {}'.format(extension, type(e).__name__, e))
+            print('Failed to load extension {}\n{}: {}'.format(
+                extension, type(e).__name__, e))
     bot.run(config.token)
     handlers = log.handlers[:]
     for hdlr in handlers:

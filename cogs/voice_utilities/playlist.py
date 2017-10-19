@@ -1,13 +1,10 @@
-import datetime
-import traceback
 import asyncio
 from collections import deque
-from itertools import islice
 from random import shuffle
 
 from .source import YoutubeDLSource
-from .entry import URLPlaylistEntry, get_header
-from .exceptions import ExtractionError, WrongEntryTypeError, LiveStreamError
+from .entry import get_header
+from .exceptions import ExtractionError, WrongEntryTypeError
 from .event_emitter import EventEmitter
 
 
@@ -108,7 +105,7 @@ class Playlist(EventEmitter):
                 song_url = baseurl + 'watch?v=%s' % entry_data['id']
 
                 try:
-                    entry, elen = await self.add_entry(song_url, **meta)
+                    entry = await self.add_entry(song_url, **meta)
                     gooditems.append(entry)
                 except ExtractionError:
                     baditems += 1
@@ -141,7 +138,7 @@ class Playlist(EventEmitter):
                 song_url = entry_data['url']
 
                 try:
-                    entry, elen = await self.add_entry(song_url, **meta)
+                    entry = await self.add_entry(song_url, **meta)
                     gooditems.append(entry)
                 except ExtractionError:
                     baditems += 1

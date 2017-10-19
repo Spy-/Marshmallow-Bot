@@ -1,12 +1,7 @@
 from discord.ext import commands
 import discord
-from collections import OrderedDict, deque, Counter
-import os, datetime
-import asyncio
-import copy
+from collections import deque, Counter
 import unicodedata
-import inspect
-
 
 class Meta:
     def __init__(self, bot):

@@ -4,7 +4,6 @@ from discord import PCMVolumeTransformer
 import discord
 from discord.ext import commands
 
-from . import utils
 from .utils.config import Config, ConfigDefaults
 
 import math

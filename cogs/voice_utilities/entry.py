@@ -185,7 +185,7 @@ class URLPlaylistEntry(BasePlaylistEntry):
             # the generic extractor requires special handling
             if extractor == 'generic':
                 flistdir = [f.rsplit('-', 1)[0] for f in os.listdir(self.download_folder)]
-                expected_fname_noex, fname_ex = os.path.basename(self.expected_filename).rsplit('.', 1)
+                expected_fname_noex = os.path.basename(self.expected_filename).rsplit('.', 1)
 
                 if expected_fname_noex in flistdir:
                     try:

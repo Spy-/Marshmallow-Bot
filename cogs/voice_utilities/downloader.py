@@ -4,8 +4,6 @@ import functools
 import youtube_dl
 import discord
 
-from .. import utils
-
 from concurrent.futures import ThreadPoolExecutor
 
 ytdl_format_options = {
