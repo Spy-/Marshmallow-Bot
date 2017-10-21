@@ -1,0 +1,6 @@
+database: aurora
+auth:     false
+host:     '127.0.0.1'
+port:     27017
+username: 'username'
+password: 'password'
