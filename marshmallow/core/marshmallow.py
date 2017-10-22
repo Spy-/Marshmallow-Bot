@@ -13,6 +13,7 @@ from marshmallow.core.mechanics.plugman import PluginManager
 from marshmallow.core.mechanics.cooldown import CooldownControl
 from marshmallow.core.mechanics.music import MusicCore
 
+
 init_cfg = Configuration()
 
 if init_cfg.dsc.bot:
@@ -59,7 +60,17 @@ class Marshmallow(client_class):
         self.log.info('Core Configuration Data Loaded')
 
     def init_database(self):
-        pass
+        self.log.info('Connecting to Database...')
+        self.db = Database(self, self.cfg.db)
+        try:
+            self.db.test.collection.find_one({})
+        except pymongo.errors.ServerSelectionTimeoutError:
+            self.log.error('A Connection To The Database Host Failed!')
+            exit(errno.ETIMEDOUT)
+        except pymongo.errors.OperationFailure:
+            self.log.error('Database Access Operation Failed!')
+            exit(errno.EACCES)
+        self.log.info('Successfully Connected to Database')
 
     def init_cooldown(self):
         self.log.info('Loading Cooldown Control...')
