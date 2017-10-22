@@ -1,12 +1,17 @@
-audio_cache/
-audio_tmp/
-logs/
-rethinkdb_data/
+.vagrant/
+.vscode/
+bin/
+cache/
+data/
+docs/
+log/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.cpython-36.pyc
 
 # C extensions
 *.so
