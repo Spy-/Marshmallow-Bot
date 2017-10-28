@@ -1,0 +1,14 @@
+name: Image Commands
+category: fun
+enabled: true
+commands:
+  - name: cat
+    glboal: true
+    enabled: false
+    usage: '{pfx}{cmd}'
+    description: Outputs a random cat image.
+  - name: dog
+    global: true
+    enabled: true
+    usage: '{pfx}{cmd}'
+    description: Outputs a random dog image.
