@@ -27,7 +27,7 @@ class PluginManager(object):
         self.commands = {}
         self.events = {}
         directory = 'marshmallow/plugins'
-        for root, files in os.walk(directory):  
+        for root, dirs, files in os.walk(directory):  
             for file in files:
                 if file == 'module.yml':
                     file_path = (os.path.join(root, file))

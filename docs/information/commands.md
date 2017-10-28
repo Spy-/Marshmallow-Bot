@@ -28,8 +28,10 @@ Commands | Description | Example
 Commands | Description | Example
 ----------|-------------|--------
 `?award` `?pay` | Awards a chosen amount of Kud from the vault to a targeted person. The amount of Kud needs to go first, followed by the target. Only server managers can award Kud from the vault. Anybody can contribute to the vault with the givetovault command. | `?ward 500 @person`
+`?dog` | Outputs a random dog image. | `?og`
 `?givetovault` `?givetobank` `?gtv` `?gtb` | The vault is a server specific Kud storage system. Members can contribute to the vault with this command. Adding to the vault taxes 5% of the Kud. The kud can then be awarded to users using the award command. | `?ivetovault`
 `?vault` `?bank` | Shows the current amount of Kud in the guild's vault. | `?ault`
+`?xkcd` | If you like humorous things and know a bit of technology, you will lose a lot of time reading these. XKCD comics are perfect for procrastination and time wasting. | `?kcd [num]`
 [Back To Top](#module-index)
 
 ### HELP
@@ -84,10 +86,12 @@ Commands | Description | Example
 ----------|-------------|--------
 `?botinformation` `?botinfo` `?info` | Shows information about the bot, version, codename, authors, etc. | `?otinformation`
 `?channelinformation` `?channelinfo` `?chinfo` `?cinfo` | Shows information and data about the mentioned channel. If no channel is mentioned, it will show data for the channel that the command is used in. | `?hannelinformation #channel`
+`?color` `?colour` `?clr` | Shows the inputted color. It accepts either a HEX code or an RGB array. | `?olor #1abc9c`
 `?owners` | Shows a list of marshmallow's owners. Users in this list have access to the administration module. | `?wners`
 `?permissions` `?perms` | Shows which permissions a user has and which they do not. If no user is mentioned, it will target the message author. | `?ermissions @person`
 `?roleinformation` `?roleinfo` `?rinfo` | Shows information and data about the inputted role. Roles mentions do not work here, lookup is done via role name. | `?oleinformation`
 `?serverinformation` `?serverinfo` `?sinfo` | Shows information and data about the server that the command is used in. | `?erverinformation`
+`?shortenurl` `?shorten` `?bitly` | Shortens a URL for you using BitLy. All URLs returned via Sigma are without ads, merely shortened using the service. | `?hortenurl https://i.redd.it/ngwebbf5nwfz.jpg`
 `?statistics` `?stats` | Shows marshmallow's current statistics. Population, message and command counts, and rates since startup. As well as when the bot last started. | `?tatistics`
 `?status` | Shows the status of marshmallow's machine. Processor information, memory, storage, network, etc. | `?tatus`
 `?userinformation` `?userinfo` `?uinfo` | Shows information and data about the mentioned user. If no user is mentioned, it will show data for the message author. | `?serinformation @person`
