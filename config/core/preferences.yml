@@ -1,8 +1,0 @@
-dev_mode:        false
-status_rotation: true
-text_only:       false
-music_only:      false
-prefix:          '?'
-currency:        'Kud'
-currency_icon:   '⚜'
-website:         'https://google.com'
