@@ -6,6 +6,10 @@ data/
 docs/
 log/
 
+# Files that have private info about the bot
+config/core/
+config/plugins/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
