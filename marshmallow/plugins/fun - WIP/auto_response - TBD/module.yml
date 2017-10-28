@@ -1,0 +1,16 @@
+name: Table Unflipping
+category: miscellaneous
+enabled: true
+events:
+  - name: table_unflipper
+    type: message
+    global: false
+    enabled: false
+  - name: press_f_adder
+    type: message
+    global: true
+    enabled: true
+  - name: nablie_plant
+    type: message
+    global: false
+    enabled: false
