@@ -1,0 +1,15 @@
+name:            name
+
+category:        category
+
+enabled:         true
+
+commands:
+  - name:        name
+    global:      true
+    enabled:     true
+    permissions: 
+      rating:    0
+      dmable:    true
+    usage:       ""
+    description: ""

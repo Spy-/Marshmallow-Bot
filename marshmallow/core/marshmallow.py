@@ -13,13 +13,13 @@ from marshmallow.core.mechanics.plugman import PluginManager
 from marshmallow.core.mechanics.cooldown import CooldownControl
 from marshmallow.core.mechanics.music import MusicCore
 
-
 init_cfg = Configuration()
 
 if init_cfg.dsc.bot:
     client_class = discord.AutoShardedClient
 else:
     client_class = discord.Client
+
 
 class Marshmallow(client_class):
     def __init__(self):
@@ -51,7 +51,7 @@ class Marshmallow(client_class):
     def init_logger(self):
         self.log = create_logger('Marshmallow')
         self.log.info('Logger Created')
-    
+
     def init_config(self):
         self.log.info('Loading Configuration...')
         self.cfg = init_cfg
@@ -73,18 +73,18 @@ class Marshmallow(client_class):
         self.log.info('Successfully Connected to Database')
 
     def init_cooldown(self):
-        self.log.info('Loading Cooldown Control...')
+        self.log.info('Loading Cooldown Controls...')
         self.cooldown = CooldownControl(self)
-        self.log.info('Cooldown Control Successfully Loaded')
+        self.log.info('Cooldown Controls Successfully Enabled')
 
     def init_music(self):
-        self.log.info('Loading Music Control...')
+        self.log.info('Loading Music Controller...')
         self.music = MusicCore(self)
-        self.log.info('Music Control Successfully Loaded')
+        self.log.info('Music Controller Initialized and Ready')
 
     def init_modules(self, init=False):
         if init:
-            self.log.info('Loading Modules...')
+            self.log.info('Loading Marshmallow Modules')
         self.modules = PluginManager(self, init)
 
     def get_prefix(self, message):
@@ -97,8 +97,8 @@ class Marshmallow(client_class):
 
     def run(self):
         try:
-            self.log.info('Connecting to Discord...')
-            super().run(self.cfg.dsc.token, bot = self.cfg.dsc.bot)
+            self.log.info('Connecting to Discord Gateway...')
+            super().run(self.cfg.dsc.token, bot=self.cfg.dsc.bot)
         except discord.LoginFailure:
             self.log.error('Invalid Token!')
             exit(errno.EPERM)
@@ -118,20 +118,23 @@ class Marshmallow(client_class):
         self.log.info(f'Connection to Discord Shard #{shard_id} Established')
         event_name = 'shard_ready'
         self.loop.create_task(self.event_runner(event_name, shard_id))
-    
+
     async def on_ready(self):
         self.ready = True
-        self.log.info('----------------------------------')
+        self.log.info('---------------------------------')
         self.log.info('Marshmallow Fully Loaded and Ready')
-        self.log.info('----------------------------------')
+        self.log.info('---------------------------------')
         self.log.info(f'User Account: {self.user.name}#{self.user.discriminator}')
         self.log.info(f'User Snowflake: {self.user.id}')
-        self.log.info('----------------------------------')
-        self.log.info('Launching Modules...')
+        self.log.info('---------------------------------')
+        self.log.info('Launching On-Ready Modules...')
         event_name = 'ready'
         self.loop.create_task(self.event_runner(event_name))
-        self.log.info('All Module Loops Created')
-        self.log.info('----------------------------------')
+        self.log.info('All On-Ready Module Loops Created')
+        self.log.info('---------------------------------')
+        if os.getenv('CI_TOKEN'):
+            self.log.info('Continuous Integration Environment Detected')
+            exit()
 
     async def on_message(self, message):
         self.message_count += 1
