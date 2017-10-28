@@ -7,9 +7,11 @@ docs/
 log/
 
 # Files that have private info about the bot
-database.yml
-discord.yml
-preferences.yml
+/config/core/*
+/config/plugins/*
+!/config/.gitkeep
+!/config/core/.gitkeep
+!/config/plugins/.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
