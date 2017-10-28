@@ -1,0 +1,12 @@
+name: Comic Commands
+category: fun
+enabled: true
+commands:
+  - name: xkcd
+    global: true
+    enabled: true
+    usage: '{pfx}{cmd} [num]'
+    description: >-
+      If you like humorous things and know a bit of technology, you will lose a
+      lot of time reading these. XKCD comics are perfect for procrastination and
+      time wasting.
