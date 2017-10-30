@@ -4,7 +4,8 @@ import discord
 
 
 async def shortenurl(cmd, message, args):
-    text_cont = None
+    await message.channel.send('This hasn\'t been implemented yet')
+    ''' text_cont = None
     if 'access_token' in cmd.cfg:
         access_token = cmd.cfg['access_token']
         if args:
@@ -38,4 +39,4 @@ async def shortenurl(cmd, message, args):
             response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
     else:
         response = discord.Embed(color=0xBE1931, title='❗ No Bit.ly Access Token.')
-    await message.channel.send(text_cont, embed=response)
+    await message.channel.send(text_cont, embed=response) '''

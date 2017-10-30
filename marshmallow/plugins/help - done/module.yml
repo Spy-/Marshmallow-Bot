@@ -1,47 +1,42 @@
-name:             Help
-
-category:         help
-
-enabled:          true
-
+name: Help
+category: help
+enabled: true
 commands:
-  - name:         help
-    global:       true
-    enabled:      true
+  - name: help
+    global: true
+    enabled: true
     permissions:
-      rating:     0
-      dmable:     true
-    usage:        "{pfx}{cmd} fish"
-    description:
-      Show information about a command if something in inputted.
-
-  - name:         modules
-    global:       true
-    enabled:      true
+      rating: 0
+      dmable: true
+    usage: '{pfx}{cmd} fish'
+    description: Show information about a command if something in inputted.
+  - name: modules
+    global: true
+    enabled: true
+    alts:
+      - module
     permissions:
-      rating:     0
-      dmable:     true
-    usage:        "{pfx}{cmd}"
-    description:
-      Shows all the module categories.
-
-  - name:         commands
-    global:       true
-    enabled:      true
+      rating: 0
+      dmable: true
+    usage: '{pfx}{cmd}'
+    description: Shows all the module categories.
+  - name: commands
+    global: true
+    enabled: true
+    alts:
+      - command
     permissions:
-      rating:     0
-      dmable:     true
-    usage:        "{pfx}{cmd} minigames"
-    description:
-      Shows the commands in a module group category.
-      To view all the module group categories, use the modules command.
-
-
+      rating: 0
+      dmable: true
+    usage: '{pfx}{cmd} minigames'
+    description: >-
+      Shows the commands in a module group category. To view all the module
+      group categories, use the modules command.
 events:
-  - name:         dm_detection
-    type:         message
-    global:       true
-    enabled:      true
+  - name: dm_detection
+    type: message
+    global: true
+    enabled: true
     permissions:
-      rating:     0
-      dmable:     true
+      rating: 0
+      dmable: true
