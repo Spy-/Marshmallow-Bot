@@ -5,6 +5,7 @@ import aiohttp
 from PIL import Image
 
 
+#returns the given users avatar
 def user_avatar(user, gif=False):
     if user.avatar_url:
         output = user.avatar_url
@@ -17,6 +18,7 @@ def user_avatar(user, gif=False):
     return output
 
 
+#parses a message that bot believes to be a command because it started with the bots prefix
 def command_message_parser(message, text):
     gld = message.guild
     ath = message.author
@@ -66,6 +68,7 @@ def movement_message_parser(member, text):
     return greeting_text
 
 
+#calculates the TODO
 def get_time_difference(member, leave=False):
     if leave:
         creation_time = member.joined_at
@@ -168,6 +171,7 @@ def get_weighted_mean(grouped_image_color):
     return weighted_mean
 
 
+#converts an rgb array to a hex format
 def rgb_to_hex(rgb_tuple):
     hex_str = ''
     for piece in rgb_tuple:
@@ -180,6 +184,7 @@ def rgb_to_hex(rgb_tuple):
     return hex_out
 
 
+#returns the dominant color of an image in hex form
 async def get_image_colors(img_url):
     if img_url:
         async with aiohttp.ClientSession() as session:

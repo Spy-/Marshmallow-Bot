@@ -5,6 +5,9 @@ from marshmallow.core.mechanics.logger import create_logger
 from marshmallow.core.mechanics.command import MarshmallowCommand
 from marshmallow.core.mechanics.event import MarshmallowEvent
 
+'''
+    Manges all modules. Will load up modules and their respective commands into the bot
+'''
 
 class PluginManager(object):
     def __init__(self, bot, init):

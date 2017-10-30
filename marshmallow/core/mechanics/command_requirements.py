@@ -1,3 +1,8 @@
+
+'''
+    Helper class for the command mechanic file
+'''
+
 class CommandRequirements(object):
     def __init__(self, cmd, message):
         self.cmd = cmd
