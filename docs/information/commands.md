@@ -4,7 +4,9 @@
 - [ADMINISTRATION](#administration)
 - [FUN](#fun)
 - [HELP](#help)
+- [MATHEMATICS](#mathematics)
 - [MINIGAMES](#minigames)
+- [MISCELLANEOUS](#miscellaneous)
 - [MUSIC](#music)
 - [SETTINGS](#settings)
 - [UTILITY](#utility)
@@ -37,9 +39,20 @@ Commands | Description | Example
 ### HELP
 Commands | Description | Example
 ----------|-------------|--------
-`?commands` | Shows the commands in a module group category. To view all the module group categories, use the modules command. | `?ommands minigames`
+`?commands` `?command` | Shows the commands in a module group category. To view all the module group categories, use the modules command. | `?ommands minigames`
 `?help` | Show information about a command if something in inputted. | `?elp fish`
-`?modules` | Shows all the module categories. | `?odules`
+`?modules` `?module` | Shows all the module categories. | `?odules`
+[Back To Top](#module-index)
+
+### MATHEMATICS
+Commands | Description | Example
+----------|-------------|--------
+`?collectchain` | Collects messages sent by the mentioned user and saves it as a chain. Only one person can use the command at the time due to the processing load it takes. | `?ollectchain @person #channel`
+`?impersonate` `?mimic` | Tries to impersonate the mentioned user if a chain file for them exists. This command is on a 20 second cooldown due to it's weight. | `?mpersonate @person`
+`?makehash` `?hash` | Creates a hash using the inputed has type. These are all the hash types you can use. sha512, sha3_224, sha3_512, MD4, dsaWithSHA, ripemd160, RIPEMD160, SHA, ecdsa-with-SHA1, sha3_384, SHA512, sha1, SHA224, md4, DSA-SHA, SHA384, blake2b, dsaEncryption, SHA256, sha384, sha, DSA, shake_128, sha224, SHA1, shake_256, sha256, MD5, blake2s, md5, sha3_256, whirlpool | `?akehash md5 Nabzie is best tree.`
+`?timeconvert` `?tconv` | Converts the given time in the given time zone to the inputted time zone. | `?imeconvert 18:57 UTC>PST`
+`?wipechain` | It wipes your entire Markov chain, if you have one. | `?ipechain`
+`?wolframalpha` `?wa` | Makes a request for Wolfram Alpha to process. This can be a lot of things, most popular being complex math operations. | `?olframalpha 69+42`
 [Back To Top](#module-index)
 
 ### MINIGAMES
@@ -50,6 +63,20 @@ Commands | Description | Example
 `?roll` `?dice` | Gives a random number from 0 to 100. You can specify the highest number the function calls by adding a number after the command. The Number TECHNICALLY does not have a limit but the bigger you use, the bigger the message, which just looks plain spammy. | `?oll 501`
 `?rps` `?rockpaperscissors` | Play Rock-Paper-Scissors with the bot. No cheating, we swear. Maybe she just doesn't like you. | `?ps s`
 `?slots` | Spin the slot machine, maybe you win, maybe you don't. Who knows? It costs 10 Kud to spin the slot machine by default. But you can specify how much you want to put in the machine. And the rewards are based on how many of the same icon you get in the middle row. Rewards are different for each icon. The slots can be spun only once every 60 seconds. | `?lots 52`
+[Back To Top](#module-index)
+
+### MISCELLANEOUS
+Commands | Description | Example
+----------|-------------|--------
+`?afk` | Sets you as afk. Whenever someone mentions you they will be notified that you are afk. When you send a message your afk status will be removed. This automatic removal ignores messages that start with the command prefix. | `?fk Sleeping or eating, probably both!`
+`?choose` | The bot will select a thing from the inputed list. Separate list items with a semicolon and space. | `?hoose Sleep; Eat; Code; Lewd Stuff`
+`?httpstatus` `?http` | Shows information about a HTTP response status code. | `?ttpstatus 404`
+`?myreminders` `?reminders` `?rms` | Shows a list of the reminders that you have created. The location where they are set to execute in. And in what time they execute in. If you add "here" to the end of the command, it will only show reminders made in the current channel. | `?yreminders here`
+`?poll` | Creates a poll with the items from the inputted list. Separate list items with a semicolon and a space. | `?oll Want to eat?; Yes; No; Hand me the cheese!`
+`?randombetween` `?ranin` | Outputs a random number between two inputted numbers. | `?andombetween 59 974`
+`?reminderinfo` `?reminder` `?rminfo` `?rmi` | Shows information about your reminder with the given ID. Such as when it executes and where. | `?eminderinfo f93f`
+`?remindme` `?remind` `?setreminder` `?alarm` `?rmme` | Sets a timer that will mention the author when it's done. The time format is H:M:S, but is not limited to the constraints of their types. Meaning you can type "200:5000:999999" if you wish. Reminders are limited to 90 days, and you are limited to 15 reminders. | `?emindme 1:03:15 LEEEEROOOOY JEEEEEENKIIIIINS!`
+`?removereminder` `?delreminder` `?delrm` | Deletes a reminder of yours with the inputted ID. | `?emovereminder 1a9e`
 [Back To Top](#module-index)
 
 ### MUSIC
@@ -84,15 +111,24 @@ Commands | Description | Example
 ### UTILITY
 Commands | Description | Example
 ----------|-------------|--------
+`?avatar` `?av` | Shows the mentioned user's avatar. If no user is mentioned, it shows the author's avatar. You can add "gif" to the end of the command to indicate that it's a gif. Or you can add "auto" to make the color strip the dominant color of the image. | `?vatar @person`
 `?botinformation` `?botinfo` `?info` | Shows information about the bot, version, codename, authors, etc. | `?otinformation`
+`?bots` | Lists the bots on the server where the command is used and shows their status. | `?ots`
+`?channelid` `?chid` `?cid` | Shows the User ID of the mentioned channel. If no channel is mentioned, it will show the ID of the channel the command is used in. If you don't want the return message to be an embed, add "text" at the end. | `?hannelid #channel`
 `?channelinformation` `?channelinfo` `?chinfo` `?cinfo` | Shows information and data about the mentioned channel. If no channel is mentioned, it will show data for the channel that the command is used in. | `?hannelinformation #channel`
 `?color` `?colour` `?clr` | Shows the inputted color. It accepts either a HEX code or an RGB array. | `?olor #1abc9c`
+`?ingame` | Shows the top played games on the server. | `?ngame @person`
 `?owners` | Shows a list of marshmallow's owners. Users in this list have access to the administration module. | `?wners`
 `?permissions` `?perms` | Shows which permissions a user has and which they do not. If no user is mentioned, it will target the message author. | `?ermissions @person`
 `?roleinformation` `?roleinfo` `?rinfo` | Shows information and data about the inputted role. Roles mentions do not work here, lookup is done via role name. | `?oleinformation`
+`?rolepopulation` `?rolepop` | Shows the population of the inputted role. If no arguments are provided, it will show the top 20 roles by population. | `?olepopulation Warlard`
+`?servericon` `?srvicon` `?icon` | Shows the server's icon image. | `?ervericon`
+`?serverid` `?guildid` `?srvid` `?sid` `?gid` | Shows the Server ID of the server the command is used in. | `?erverid`
 `?serverinformation` `?serverinfo` `?sinfo` | Shows information and data about the server that the command is used in. | `?erverinformation`
-`?shortenurl` `?shorten` `?bitly` | Shortens a URL for you using BitLy. All URLs returned via Sigma are without ads, merely shortened using the service. | `?hortenurl https://i.redd.it/ngwebbf5nwfz.jpg`
+`?shortenurl` `?shorten` `?bitly` | Shortens a URL for you using BitLy. All URLs returned via Marshmallow are without ads, merely shortened using the service. | `?hortenurl https://i.redd.it/ngwebbf5nwfz.jpg`
 `?statistics` `?stats` | Shows marshmallow's current statistics. Population, message and command counts, and rates since startup. As well as when the bot last started. | `?tatistics`
 `?status` | Shows the status of marshmallow's machine. Processor information, memory, storage, network, etc. | `?tatus`
+`?userid` `?uid` | Shows the User ID of the mentioned user. If no user is mentioned, it will show the author's ID. If you don't want the return message to be an embed, add "text" at the end. | `?serid @person`
 `?userinformation` `?userinfo` `?uinfo` | Shows information and data about the mentioned user. If no user is mentioned, it will show data for the message author. | `?serinformation @person`
+`?whoplays` | Generates a list of users playing the inputted game. | `?hoplays Overwatch`
 [Back To Top](#module-index)

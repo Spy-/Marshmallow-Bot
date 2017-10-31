@@ -10,7 +10,7 @@ commands:
     enabled: true
     usage: '{pfx}{cmd} https://i.redd.it/ngwebbf5nwfz.jpg'
     description: >-
-      Shortens a URL for you using BitLy. All URLs returned via Sigma are
+      Shortens a URL for you using BitLy. All URLs returned via Marshmallow are
       without ads, merely shortened using the service.
   - name: color
     alts:
