@@ -32,7 +32,9 @@ commands:
     enabled: true
     usage: '{pfx}{cmd}'
     permissions:
+      rating: 0
       owner: true
+      dmable: false
     description: >-
       Overrides the current music player in instances where marshmallow is stuck
       in a channel. This will not purge the queue, just disconnect the bot.
