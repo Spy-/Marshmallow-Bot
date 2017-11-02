@@ -2,7 +2,9 @@ import os
 from time import time
 from datetime import datetime as date
 import logging
-
+'''
+    Sets up the logger that the bot uses to log every action it does
+'''
 log_fmt = '%(levelname)-8s %(asctime)s %(name)-20s %(message)s'
 
 if os.getenv('LOGTARGET_JOURNAL'):
