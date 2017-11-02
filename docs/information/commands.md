@@ -83,11 +83,13 @@ Commands | Description | Example
 Commands | Description | Example
 ----------|-------------|--------
 `?disconnect` `?stop` | Stops the music, disconnects the bot from the current voice channel, and purges the music queue. | `?isconnect`
-`?musicoverride` `?overridemusic` `?musickill` `?killmusic` | Overrides the current music player in instances where marshmallow is stuck in a channel. This will not purge the queue, just disconnect the bot. (Bot Owner Only) | `?usicoverride`
+`?musicoverride` `?overridemusic` `?musickill` `?killmusic` | Overrides the current music player in instances where marshmallow is stuck in a channel. This will not purge the queue, just disconnect the bot. | `?usicoverride`
 `?nowplaying` `?currentsong` `?playing` `?np` | Shows information regarding the currently playing song. | `?owplaying`
+`?pause` | Pauses the music player. | `?ause`
 `?play` `?start` | Starts playing the music queue. | `?lay`
 `?queue` `?add` | Queues up a song to play from YouTube. Either from a direct URL or text search. Playlists are supported but take a long time to process. | `?ueue Kaskade Disarm You Illenium Remix`
 `?repeat` | Toggles if the current queue should be repeated. Whenever a song is played, it's re-added to the end of the queue. | `?epeat`
+`?resume` | Resumes the music player. | `?esume`
 `?shuffle` | Randomizes the current song queue. | `?huffle`
 `?skip` `?next` | Skips the currently playing song. | `?kip`
 `?summon` `?move` | If the bot isn't connected to any channel, it'll connect to yours. If it is connected, it will move to you. | `?ummon`
