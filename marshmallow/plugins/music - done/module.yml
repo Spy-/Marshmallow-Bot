@@ -16,6 +16,14 @@ commands:
     enabled: true
     usage: '{pfx}{cmd}'
     description: Starts playing the music queue.
+  - name: pause
+    enabled: true
+    usage: '{pfx}{cmd}'
+    description: Pauses the music player.
+  - name: resume
+    enabled: true
+    usage: '{pfx}{cmd}'
+    description: Resumes the music player.
   - name: disconnect
     alts:
       - stop
@@ -31,13 +39,9 @@ commands:
       - killmusic
     enabled: true
     usage: '{pfx}{cmd}'
-    permissions:
-      rating: 0
-      owner: true
-      dmable: false
     description: >-
-      Overrides the current music player in instances where marshmallow is stuck
-      in a channel. This will not purge the queue, just disconnect the bot.
+      Overrides the current music player in instances where marshmallow is stuck in a
+      channel. This will not purge the queue, just disconnect the bot.
   - name: summon
     alts:
       - move
