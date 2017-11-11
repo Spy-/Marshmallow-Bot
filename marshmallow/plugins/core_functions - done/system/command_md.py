@@ -16,8 +16,7 @@ async def command_md(ev):
             categories.update({cat: cmd_list})
         key_list = sorted(list(categories))
         prefix = '?'
-        output = '\n'
-        output += '\n## Module Index'
+        output = '\n## Module Index'
         for key in key_list:
             output += f'\n- [{key.upper()}](#{key.lower()})'
         for key in key_list:
@@ -33,7 +32,7 @@ async def command_md(ev):
                     for alt in command.alts:
                         command_names += f' `{prefix}{alt}`'
                 command_desc = command.desc.replace('\n', ' ')
-                command_usage = f'{prefix}{command.usage[2:]}'
+                command_usage = f'{prefix}{command.usage[1:]}'
                 output += f'\n{command_names} | {command_desc} | `{command_usage}`'
             output += '\n[Back To Top](#module-index)'
         with open('docs/information/commands.md', 'w', encoding='utf-8') as commands_md_file:

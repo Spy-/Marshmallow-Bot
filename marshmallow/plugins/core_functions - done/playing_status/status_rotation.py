@@ -1,10 +1,7 @@
 import asyncio
-import discord
 import secrets
 
-statuses = [
-    'the pyro update'
-]
+import discord
 
 
 async def status_rotation(ev):
@@ -15,10 +12,10 @@ async def status_rotation(ev):
 async def status_clockwork(ev):
     while True:
         if ev.bot.cfg.pref.status_rotation:
-            status = f'with {secrets.choice(statuses)}'
+            statuses = [
+                'Roblox'
+            ]
+            status = f'{secrets.choice(statuses)}'
             game = discord.Game(name=status)
-            try:
-                await ev.bot.change_presence(game=game)
-            except Exception:
-                pass
+            await ev.bot.change_presence(game=game)
         await asyncio.sleep(180)
