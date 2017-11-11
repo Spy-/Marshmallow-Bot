@@ -8,6 +8,10 @@ from .logger import create_logger
 
 
 class DiscordConfig(object):
+    """
+    Creates the class for client configuration data.
+    :param client_cfg_data:
+    """
     def __init__(self, client_cfg_data):
         self.raw = client_cfg_data
         self.token = client_cfg_data.get('token')
@@ -16,6 +20,10 @@ class DiscordConfig(object):
 
 
 class DatabaseConfig(object):
+    """
+    Creates the class for database configuration data.
+    :param db_cfg_data:
+    """
     def __init__(self, db_cfg_data):
         self.raw = db_cfg_data
         self.database = db_cfg_data.get('database')
@@ -27,6 +35,10 @@ class DatabaseConfig(object):
 
 
 class PreferencesConfig(object):
+    """
+    Creates the class for preference configuration data.
+    :param pref_cfg_data:
+    """
     def __init__(self, pref_cfg_data):
         self.raw = pref_cfg_data
         self.dev_mode = pref_cfg_data.get('dev_mode')
@@ -42,6 +54,12 @@ class PreferencesConfig(object):
 
 
 class Configuration(object):
+    """
+    A container for all of the configuration subclasses.
+    Loads the configuration files from the config folder.
+    If any of the files are missing, the client will shut down.
+    This will result in an error being returned with a ENOENT code.
+    """
     def __init__(self):
         self.log = create_logger('Config')
         ci_token = os.getenv('CI_TOKEN')

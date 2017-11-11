@@ -1,9 +1,12 @@
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-#~~Helper class for the command mechanic file~~#
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-
 class CommandRequirements(object):
+    """
+    Command Requirements:
+    Ran on each message with a command.
+    Makes the requirement class for a command.
+    Used for checking if the bot has the needed permissions.
+    :param cmd:
+    :param message:
+    """
     def __init__(self, cmd, message):
         self.cmd = cmd
         self.msg = message
