@@ -3,6 +3,14 @@ import pymongo
 
 
 class Database(pymongo.MongoClient):
+    """
+    Database class that uses the pymongo.MongoClient as it's
+    base for all functions. Requires a running MongoDB to be
+    running. Includes functions that simplify complex operations
+    such as statistics.
+    :param bot:
+    :param db_cfg:
+    """
     def __init__(self, bot, db_cfg):
         self.bot = bot
         self.db_cfg = db_cfg
@@ -14,10 +22,24 @@ class Database(pymongo.MongoClient):
         super().__init__(self.db_address)
 
     def insert_guild_settings(self, guild_id):
+        """
+        If no guild setting exists, this will create a
+        new settings file for the guild in the database.
+            :param guild_id:
+            return
+        """
         settings_data = {'ServerID': guild_id}
         self[self.bot.cfg.db.database].ServerSettings.insert_one(settings_data)
 
     def get_guild_settings(self, guild_id, setting_name):
+        """
+        Retrieves the setting by the inputted setting name
+        for the inputted guild id. If the setting is not set
+        it will return None as it's result.
+        :param guild_id:
+        :param setting_name:
+        :return:
+        """
         guild_settings = self[self.bot.cfg.db.database].ServerSettings.find_one({'ServerID': guild_id})
         if not guild_settings:
             setting_value = None
@@ -30,6 +52,14 @@ class Database(pymongo.MongoClient):
         return setting_value
 
     def set_guild_settings(self, guild_id, setting_name, value):
+        """
+        Writes to the guild's settings file.
+        Sets the specified setting name to the specified value.
+        :param guild_id:
+        :param setting_name:
+        :param value:
+        :return:
+        """
         guild_settings = self[self.bot.cfg.db.database].ServerSettings.find_one({'ServerID': guild_id})
         if not guild_settings:
             self.insert_guild_settings(guild_id)
@@ -38,6 +68,12 @@ class Database(pymongo.MongoClient):
         self[self.bot.cfg.db.database].ServerSettings.update_one(update_target, update_data)
 
     def get_experience(self, user, guild):
+        """
+        Get's a user's experience points.
+        :param user:
+        :param guild:
+        :return:
+        """
         database = self[self.bot.cfg.db.database]
         collection = database['ExperienceSystem']
         entry = collection.find_one({'UserID': user.id})
@@ -61,6 +97,14 @@ class Database(pymongo.MongoClient):
         return output
 
     def add_experience(self, user, guild, points, additive=True):
+        """
+        Adds experience points to a user.
+        :param user:
+        :param guild:
+        :param points:
+        :param additive:
+        :return:
+        """
         database = self[self.bot.cfg.db.database]
         collection = database['ExperienceSystem']
         entry = collection.find_one({'UserID': user.id})
@@ -96,6 +140,12 @@ class Database(pymongo.MongoClient):
         collection.update_one(update_target, update_data)
 
     def get_currency(self, user, guild):
+        """
+        Gets a user's current currency value.
+        :param user:
+        :param guild:
+        :return:
+        """
         database = self[self.bot.cfg.db.database]
         collection = database['CurrencySystem']
         entry = collection.find_one({'UserID': user.id})
@@ -125,6 +175,14 @@ class Database(pymongo.MongoClient):
         return output
 
     def add_currency(self, user, guild, points, additive=True):
+        """
+        Adds to the user's currency value.
+        :param user:
+        :param guild:
+        :param points:
+        :param additive:
+        :return:
+        """
         database = self[self.bot.cfg.db.database]
         collection = database['CurrencySystem']
         entry = collection.find_one({'UserID': user.id})
@@ -168,6 +226,12 @@ class Database(pymongo.MongoClient):
         collection.update_one(update_target, update_data)
 
     def rmv_currency(self, user, points):
+        """
+        Subtracts a user's currency.
+        :param user:
+        :param points:
+        :return:
+        """
         database = self[self.bot.cfg.db.database]
         collection = database['CurrencySystem']
         entry = collection.find_one({'UserID': user.id})
@@ -189,6 +253,11 @@ class Database(pymongo.MongoClient):
         collection.update_one(update_target, update_data)
 
     def get_inventory(self, user):
+        """
+        Get's a user's inventory.
+        :param user:
+        :return:
+        """
         inventory = self[self.db_cfg.database]['Inventory'].find_one({'UserID': user.id})
         if not inventory:
             self[self.db_cfg.database]['Inventory'].insert_one({'UserID': user.id, 'Items': []})
@@ -198,6 +267,12 @@ class Database(pymongo.MongoClient):
         return inventory
 
     def update_inv(self, user, inv):
+        """
+        Update's a user's inventory with the new input.
+        :param user:
+        :param inv:
+        :return:
+        """
         self[self.db_cfg.database]['Inventory'].update_one(
             {'UserID': user.id},
             {
@@ -206,6 +281,12 @@ class Database(pymongo.MongoClient):
         )
 
     def add_to_inventory(self, user, item_data):
+        """
+        Adds an item to the ite's inventory.
+        :param user:
+        :param item_data:
+        :return:
+        """
         stamp = arrow.utcnow().timestamp
         item_data.update({'Timestamp': stamp})
         inv = self.get_inventory(user)
@@ -213,6 +294,12 @@ class Database(pymongo.MongoClient):
         self.update_inv(user, inv)
 
     def del_from_inventory(self, user, item_id):
+        """
+        Removes an item from the users inventory.
+        :param user:
+        :param item_id:
+        :return:
+        """
         inv = self.get_inventory(user)
         for item in inv:
             if item['item_id'] == item_id:
