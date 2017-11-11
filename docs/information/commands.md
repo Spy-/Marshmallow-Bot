@@ -7,6 +7,7 @@
 - [MINIGAMES](#minigames)
 - [MISCELLANEOUS](#miscellaneous)
 - [MUSIC](#music)
+- [PROFFESIONS](#proffesions)
 - [SETTINGS](#settings)
 - [UTILITY](#utility)
 
@@ -99,6 +100,25 @@ Commands | Description | Example
 `?summon` `?move` | If the bot isn't connected to any channel, it'll connect to yours. If it is connected, it will move to you. | `?summon`
 `?unqueue` `?remove` | Removes a song from the queue. Minimum number is 1 and the maximum is however many items the queue has. Even though list indexes start at zero. | `?unqueue 5`
 `?volume` `?vol` | Changes the volume of the bot. | `?volume 50`
+[Back To Top](#module-index)
+
+### PROFFESIONS
+Commands | Description | Example
+----------|-------------|--------
+`?buyupgrade` `?shop` | Opens Marshmallow's profession upgrade shop. | `?buyupgrade`
+`?cook` `?make` | Uses a recipe to create an item from raw resources that you've gathered. You can see all available recipes with the recipes command. | `?cook Shade Tea`
+`?filtersell` `?fsell` | Sells all items that have a certain attribute. The accepted attributes are name, type and rarity. | `?filtersell rarity:Legendary`
+`?finditem` | Looks up information about an item. The first argument needs to be the item type. For example if it is a fish, meat, plant or material. And the rest is the name of the item. | `?finditem golden gloop`
+`?fish` | Cast a lure and try to catch some fish. You can fish once every 60 seconds, better not scare the fish away. | `?fish`
+`?forage` | Go hiking and search nature for all the delicious bounties it has. Look for plants that you might want to use for cooking in the future. Foraging is tiring so you need to rest for 60 seconds after looking for plants. | `?forage`
+`?hunt` | Go into the wilderness and hunt for game. You can hunt once every 60 seconds, everyone needs rest. | `?hunt`
+`?inspect` | Inspects an item that is in your inventory. | `?inspect Nabfischz`
+`?inventory` `?bag` `?storage` `?backpack` | Shows your current inventory. The inventory has 64 slots at the start but can be upgraded. You can also specify the page number you want to see. The inventory is sorted by item rarity. | `?inventory 2 @person`
+`?inventorystats` `?invstats` `?bagstats` | Shows the statistics of a user's inventory. The number of items per type and per rarity. | `?inventorystats @person`
+`?recipes` | Lists all recipes available for making. The recipe list is limited to 10 items per page. You can specify the number of the page that you want to view. | `?recipes`
+`?sell` | Sells an item from your inventory. Input all instead of the item name to sell your entire inventory. | `?sell Copula`
+`?upgrades` | Shows the user's current upgrades. You can view another person's upgrades by tagetting them. | `?upgrades @person`
+`?viewrecipe` `?recipe` `?vrec` | Shows information about a recipe. Such as the ingredients required, value of the item, and it's description. | `?viewrecipe Shade Tea`
 [Back To Top](#module-index)
 
 ### SETTINGS

@@ -17,7 +17,7 @@ async def version_check(ev):
         latest = f'{data["version"]["major"]}.{data["version"]["minor"]}.{data["version"]["patch"]}'
         latest += f' {data["codename"]}'
         ev.log.warning('---------------------------------')
-        ev.log.warning('Your Sigma version is outdated.')
+        ev.log.warning('Your Marshmallow version is outdated.')
         ev.log.warning(f'CURRENT: {current}')
         ev.log.warning(f'LATEST:  {latest}')
         ev.log.warning('Updating is strongly suggested.')
