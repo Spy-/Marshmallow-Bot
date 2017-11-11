@@ -125,7 +125,7 @@ class CooldownControl(object):
         else:
             cd_name = f'cd_{cmd}_{user.id}'
         entry = self.cds.find_one({'name': cd_name})
-        end_stamp = arrow.utcnow().timestamp  amount
+        end_stamp = arrow.utcnow().timestamp + amount
         if entry:
             self.cds.update_one({'name': cd_name}, {'$set': {'end_stamp': end_stamp}})
         else:
