@@ -9,6 +9,8 @@ async def color(cmd, message, args):
             color_input = args[0]
             while color_input.startswith('#'):
                 color_input = color_input[1:]
+            while color_input.startswith('0x'):
+                color_input = color_input[2:]
             if len(color_input) == 6:
                 try:
                     color_tupple = (int(color_input[:2], 16), int(color_input[2:-2], 16), int(color_input[4:], 16))
