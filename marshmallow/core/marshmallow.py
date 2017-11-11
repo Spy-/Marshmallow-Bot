@@ -5,13 +5,14 @@ import shutil
 import discord
 import pymongo
 
-from marshmallow.core.mechanics.database import Database
 from marshmallow.core.mechanics.config import Configuration
+from marshmallow.core.mechanics.cooldown import CooldownControl
+from marshmallow.core.mechanics.database import Database
 from marshmallow.core.mechanics.information import Information
 from marshmallow.core.mechanics.logger import create_logger
-from marshmallow.core.mechanics.plugman import PluginManager
-from marshmallow.core.mechanics.cooldown import CooldownControl
 from marshmallow.core.mechanics.music import MusicCore
+from marshmallow.core.mechanics.plugman import PluginManager
+from marshmallow.core.mechanics.threading import QueueControl
 
 init_cfg = Configuration()
 
@@ -33,6 +34,8 @@ class Marshmallow(client_class):
         self.cool_down = None
         self.music = None
         self.modules = None
+        self.queue = QueueControl()
+        self.launched = False
         #Initialize startup methods
         self.create_cache()
         self.init_logger()
@@ -41,7 +44,7 @@ class Marshmallow(client_class):
         self.log.info('---------------------------------')
         self.init_database()
         self.log.info('---------------------------------')
-        self.init_cooldown()
+        self.init_cool_down()
         self.log.info('---------------------------------')
         self.init_music()
         self.log.info('---------------------------------')
@@ -85,9 +88,9 @@ class Marshmallow(client_class):
             exit(errno.EACCES)
         self.log.info('Successfully Connected to Database')
 
-    def init_cooldown(self):
+    def init_cool_down(self):
         self.log.info('Loading Cooldown Controls...')
-        self.cooldown = CooldownControl(self)
+        self.cool_down = CooldownControl(self)
         self.log.info('Cooldown Controls Successfully Enabled')
 
     #loads up the music utility requirements for music to work
@@ -124,7 +127,9 @@ class Marshmallow(client_class):
     async def event_runner(self, event_name, *args):
         if event_name in self.modules.events:
             for event in self.modules.events[event_name]:
-                self.loop.create_task(event.execute(*args))
+                # self.loop.create_task(event.execute(*args))
+                task = event, *args
+                await self.queue.queue.put(task)
 
     #event for when the bot connects to a server/guild
     async def on_connect(self):
@@ -142,81 +147,104 @@ class Marshmallow(client_class):
     #event for when the bot is done loading everything
     async def on_ready(self):
         self.ready = True
-        self.log.info('---------------------------------')
-        self.log.info('Marshmallow Fully Loaded and Ready')
-        self.log.info('---------------------------------')
+        self.log.info('----------------------------------')
+        self.log.info('Marhsmallow Fully Loaded and Ready')
+        self.log.info('----------------------------------')
         self.log.info(f'User Account: {self.user.name}#{self.user.discriminator}')
         self.log.info(f'User Snowflake: {self.user.id}')
-        self.log.info('---------------------------------')
+        self.log.info('----------------------------------')
         self.log.info('Launching On-Ready Modules...')
-        event_name = 'ready'
-        self.loop.create_task(self.event_runner(event_name))
+        self.loop.create_task(self.event_runner('ready'))
+        if not self.launched:
+            self.loop.create_task(self.event_runner('launch'))
+            self.launched = True
         self.log.info('All On-Ready Module Loops Created')
-        self.log.info('---------------------------------')
+        self.log.info('----------------------------------')
         if os.getenv('CI_TOKEN'):
             self.log.info('Continuous Integration Environment Detected')
             exit()
 
-    #event for when a message is sent in a discord server/guild
+    def get_cmd_and_args(self, message, args, mention=False):
+        args = list(filter(lambda a: a != '', args))
+        if mention:
+            try:
+                cmd = args.pop(0).lower()
+            except:
+                cmd = None
+        else:
+            cmd = args.pop(0)[len(self.get_prefix(message)):].lower()
+        return cmd, args
+
+    def clean_self_mentions(self, message):
+        for mention in message.mentions:
+            if mention.id == self.user.id:
+                message.mentions.remove(mention)
+                break
+
     async def on_message(self, message):
         self.message_count += 1
         if not message.author.bot:
             event_name = 'message'
-            prefix = self.get_prefix(message)
-            if message.content.startswith(prefix):
-                args = message.content.split(' ')
-                args = list(filter(lambda a: a != '', args))
-                cmd = args.pop(0)[len(self.get_prefix(message)):].lower()
-                if cmd in self.modules.alts:
-                    cmd = self.modules.alts[cmd]
-                if cmd in self.modules.commands:
-                    self.loop.create_task(self.modules.commands[cmd].execute(message, args))
             self.loop.create_task(self.event_runner(event_name, message))
             if self.user.mentioned_in(message):
                 event_name = 'mention'
                 self.loop.create_task(self.event_runner(event_name, message))
+            prefix = self.get_prefix(message)
+            if message.content.startswith(prefix):
+                args = message.content.split(' ')
+                cmd, args = self.get_cmd_and_args(message, args)
+            elif message.content.startswith(self.user.mention):
+                args = message.content.split(' ')[1:]
+                self.clean_self_mentions(message)
+                cmd, args = self.get_cmd_and_args(message, args, mention=True)
+            elif message.content.startswith(f'<@!{self.user.id}>'):
+                args = message.content.split(' ')[1:]
+                cmd, args = self.get_cmd_and_args(message, args, mention=True)
+            else:
+                cmd = None
+                args = []
+            if cmd:
+                if cmd in self.modules.alts:
+                    cmd = self.modules.alts[cmd]
+                if cmd in self.modules.commands:
+                    command = self.modules.commands[cmd]
+                    # self.loop.create_task(command.execute(message, args))
+                    task = command, message, args
+                    await self.queue.queue.put(task)
 
-    #event for when a user edits a message
     async def on_message_edit(self, before, after):
         if not before.author.bot:
             event_name = 'message_edit'
             self.loop.create_task(self.event_runner(event_name, before, after))
 
-    #event for when a user deletes a message
     async def on_message_delete(self, message):
         if not message.author.bot:
             event_name = 'message_delete'
             self.loop.create_task(self.event_runner(event_name, message))
 
-    #event for when a user joins a server/guild that the bot is a member of
     async def on_member_join(self, member):
         if not member.bot:
             event_name = 'member_join'
             self.loop.create_task(self.event_runner(event_name, member))
 
-    #event for when a user leaves a server/guild that the bot is a member of
     async def on_member_remove(self, member):
         if not member.bot:
             event_name = 'member_remove'
             self.loop.create_task(self.event_runner(event_name, member))
 
-    #event for when a user changes something about themselves. ie: name, nickname, avatar
     async def on_member_update(self, before, after):
         if not before.bot:
             event_name = 'member_update'
             self.loop.create_task(self.event_runner(event_name, before, after))
 
-    #event for when the bot joins a server/guild
     async def on_guild_join(self, guild):
         event_name = 'guild_join'
         self.loop.create_task(self.event_runner(event_name, guild))
 
-    #event for when the bot leaves a server/guild
     async def on_guild_remove(self, guild):
         event_name = 'guild_remove'
         self.loop.create_task(self.event_runner(event_name, guild))
 
-    #event for when a user or bot changes their voice state. ie: enters a voice channel, mutes, deafeans...
     async def on_voice_state_update(self, member, before, after):
         event_name = 'voice_state_update'
         self.loop.create_task(self.event_runner(event_name, member, before, after))
