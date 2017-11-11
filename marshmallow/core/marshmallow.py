@@ -25,10 +25,10 @@ else:
 
 class Marshmallow(client_class):
     """
-    Apex Sigma's central core.
+    Apex Marshmallow's central core.
     Loads and initializes all core submodules.
     Handles all Discord events and command calls.
-    Class container of Apex Sigma initialized with
+    Class container of Apex Marshmallow initialized with
     a discord.py client class.
     If the client is set to be an official bot client
     the class is set to discord.AutoShardedClient(),
