@@ -8,7 +8,7 @@ async def help(cmd, message, args):
             cmd_name = cmd.bot.modules.alts[cmd_name]
         if cmd_name in cmd.bot.modules.commands:
             command = cmd.bot.modules.commands[cmd_name]
-            response = discord.Embed(color=discord.Colour.orange(), title=f'📄 {command.name.upper()} Usage and Information')
+            response = discord.Embed(color=0x1B6F5F, title=f'📄 {command.name.upper()} Usage and Information')
             response.add_field(name='Usage Example', value=f'`{command.usage}`', inline=False)
             response.add_field(name='Command Description', value=f'```\n{command.desc}\n```', inline=False)
             if command.alts:
