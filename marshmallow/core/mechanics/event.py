@@ -1,4 +1,5 @@
 import discord
+
 from marshmallow.core.mechanics.logger import create_logger
 
 
@@ -7,9 +8,12 @@ class MarshmallowEvent(object):
         self.bot = bot
         self.db = self.bot.db
         self.event = event
-        self.event_type = event_info['type']
         self.plugin_info = plugin_info
         self.event_info = event_info
+        self.event_type = self.event_info['type']
+        self.alts = None
+        self.usage = None
+        self.desc = None
         self.name = self.event_info['name']
         self.category = self.plugin_info['category']
         self.log = create_logger(self.name.upper())

@@ -1,3 +1,4 @@
+import arrow
 import pymongo
 
 
@@ -6,11 +7,11 @@ class Database(pymongo.MongoClient):
         self.bot = bot
         self.db_cfg = db_cfg
         if self.db_cfg.auth:
-            db_address = f'mongodb://{self.db_cfg.username}:{self.db_cfg.password}'
-            db_address += f'@{self.db_cfg.host}:{self.db_cfg.port}/'
+            self.db_address = f'mongodb://{self.db_cfg.username}:{self.db_cfg.password}'
+            self.db_address += f'@{self.db_cfg.host}:{self.db_cfg.port}/'
         else:
-            db_address = f'mongodb://{self.db_cfg.host}:{self.db_cfg.port}/'
-        super().__init__(db_address)
+            self.db_address = f'mongodb://{self.db_cfg.host}:{self.db_cfg.port}/'
+        super().__init__(self.db_address)
 
     def insert_guild_settings(self, guild_id):
         settings_data = {'ServerID': guild_id}
@@ -77,13 +78,13 @@ class Database(pymongo.MongoClient):
             global_xp = 0
             guilds = {}
         guild_id = str(guild.id)
-        if additive:
-            global_xp += points
         if guild_id in guilds:
             guild_points = guilds[guild_id]
         else:
             guild_points = 0
-        guild_points += points
+        if additive:
+            global_xp += points
+            guild_points += points
         guild_data = {guild_id: guild_points}
         guilds.update(guild_data)
         xp_data = {
@@ -147,19 +148,19 @@ class Database(pymongo.MongoClient):
             current_amount = 0
             guilds = {}
         guild_id = str(guild.id)
-        if additive:
-            global_amount += points
         if guild_id in guilds:
             guild_points = guilds[guild_id]
         else:
             guild_points = 0
+        if additive:
+            global_amount += points
+            guild_points += points
         current_amount += points
-        guild_points += points
         guild_data = {guild_id: guild_points}
         guilds.update(guild_data)
         xp_data = {
             'current': current_amount,
-            'global': global_amount,
+            'global': int(global_amount),
             'guilds': guilds
         }
         update_target = {'UserID': user.id}
@@ -205,6 +206,8 @@ class Database(pymongo.MongoClient):
         )
 
     def add_to_inventory(self, user, item_data):
+        stamp = arrow.utcnow().timestamp
+        item_data.update({'Timestamp': stamp})
         inv = self.get_inventory(user)
         inv.append(item_data)
         self.update_inv(user, inv)

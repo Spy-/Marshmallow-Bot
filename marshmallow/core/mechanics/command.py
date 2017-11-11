@@ -1,12 +1,14 @@
 import os
-import yaml
-import discord
 import secrets
 import traceback
+
+import discord
+import yaml
+
+from marshmallow.core.mechanics.command_requirements import CommandRequirements
 from marshmallow.core.mechanics.logger import create_logger
 from marshmallow.core.mechanics.permissions import GlobalCommandPermissions
 from marshmallow.core.mechanics.permissions import ServerCommandPermissions
-from marshmallow.core.mechanics.command_requirements import CommandRequirements
 from marshmallow.core.utilities.stats_processing import add_cmd_stat
 
 
@@ -99,10 +101,10 @@ class MarshmallowCommand(object):
 
     def add_usage_exp(self, message):
         if message.guild:
-            if not self.bot.cooldown.on_cooldown('UsageExperience', message.author):
+            if not self.bot.cool_down.on_cooldown('UsageExperience', message.author):
                 exp_points = 1 + secrets.randbelow(9)
                 self.db.add_experience(message.author, message.guild, exp_points)
-                self.bot.cooldown.set_cooldown('UsageExperience', message.author, 30)
+                self.bot.cool_down.set_cooldown('UsageExperience', message.author, 30)
 
     @staticmethod
     async def respond_with_icon(message, icon):
@@ -165,55 +167,61 @@ class MarshmallowCommand(object):
             if not self.bot.cfg.dsc.bot and message.author.id != self.bot.user.id:
                 self.log.warning(f'{message.author.name} tried using me.')
                 return
-            perms = GlobalCommandPermissions(self, message)
-            guild_allowed = ServerCommandPermissions(self, message)
-            self.log_command_usage(message, args)
-            if perms.permitted:
-                if guild_allowed.permitted:
-                    requirements = CommandRequirements(self, message)
-                    if requirements.reqs_met:
-                        try:
-                            await getattr(self.command, self.name)(self, message, args)
-                            await add_cmd_stat(self.db, self, message, args)
-                            self.add_usage_exp(message)
-                            self.bot.command_count += 1
-                        except self.get_exception() as e:
-                            await self.respond_with_icon(message, '❗')
-                            err_token = secrets.token_hex(16)
-                            self.log_error(message, args, e, err_token)
-                            title = '❗ An Error Occurred!'
-                            err_text = 'Something seems to have gone wrong.'
-                            err_text += '\nPlease send this token to our support server.'
-                            err_text += f'\nThe invite link is in the **{self.bot.get_prefix(message)}help** command.'
-                            err_text += f'\nToken: **{err_token}**'
-                            error_embed = discord.Embed(color=0xBE1931)
-                            error_embed.add_field(name=title, value=err_text)
+            cd_identifier = f'{self.name}_{message.author.id}'
+            if not self.bot.cool_down.cmd.on_cooldown(cd_identifier):
+                self.bot.cool_down.cmd.set_cooldown(cd_identifier)
+                perms = GlobalCommandPermissions(self, message)
+                guild_allowed = ServerCommandPermissions(self, message)
+                self.log_command_usage(message, args)
+                if perms.permitted:
+                    if guild_allowed.permitted:
+                        requirements = CommandRequirements(self, message)
+                        if requirements.reqs_met:
                             try:
-                                await message.author.send(embed=error_embed)
+                                await getattr(self.command, self.name)(self, message, args)
+                                await add_cmd_stat(self.db, self, message, args)
+                                self.add_usage_exp(message)
+                                self.bot.command_count += 1
+                            except self.get_exception() as e:
+                                await self.respond_with_icon(message, '❗')
+                                err_token = secrets.token_hex(16)
+                                self.log_error(message, args, e, err_token)
+                                prefix = self.bot.get_prefix(message)
+                                title = '❗ An Error Occurred!'
+                                err_text = 'Something seems to have gone wrong.'
+                                err_text += '\nPlease send this token to our support server.'
+                                err_text += f'\nThe invite link is in the **{prefix}help** command.'
+                                err_text += f'\nToken: **{err_token}**'
+                                error_embed = discord.Embed(color=0xBE1931)
+                                error_embed.add_field(name=title, value=err_text)
+                                try:
+                                    await message.channel.send(embed=error_embed)
+                                except discord.Forbidden:
+                                    pass
+                        else:
+                            await self.respond_with_icon(message, '❗')
+                            reqs_embed = discord.Embed(color=0xBE1931)
+                            reqs_error_title = f'❗ I am missing permissions!'
+                            reqs_error_list = ''
+                            for req in requirements.missing_list:
+                                req = req.replace('_', ' ').title()
+                                reqs_error_list += f'\n- {req}'
+                            reqs_embed.add_field(name=reqs_error_title, value=f'```\n{reqs_error_list}\n```')
+                            reqs_embed.set_footer(text=f'{self.bot.get_prefix(message)}{self.name}')
+                            try:
+                                await message.channel.send(embed=reqs_embed)
                             except discord.Forbidden:
                                 pass
                     else:
-                        await self.respond_with_icon(message, '❗')
-                        reqs_embed = discord.Embed(color=0xBE1931)
-                        reqs_error_title = f'❗ I am missing permissions!'
-                        reqs_error_list = ''
-                        for req in requirements.missing_list:
-                            req = req.replace('_', ' ').title()
-                            reqs_error_list += f'\n- {req}'
-                        reqs_embed.add_field(name=reqs_error_title, value=f'```\n{reqs_error_list}\n```')
-                        reqs_embed.set_footer(text=f'{self.bot.get_prefix(message)}{self.name}')
+                        self.log.warning('ACCESS DENIED: This module or command is not allowed in this location.')
+                        await self.respond_with_icon(message, '⛔')
+                else:
+                    self.log_unpermitted(perms)
+                    await self.respond_with_icon(message, '⛔')
+                    if perms.response:
                         try:
-                            await message.author.send(embed=reqs_embed)
+                            await message.channel.send(embed=perms.response)
                         except discord.Forbidden:
                             pass
-                else:
-                    self.log.warning('ACCESS DENIED: This module or command is not allowed in this location.')
-                    await self.respond_with_icon(message, '⛔')
             else:
-                self.log_unpermitted(perms)
-                await self.respond_with_icon(message, '⛔')
-                if perms.response:
-                    try:
-                        await message.channel.send(embed=perms.response)
-                    except discord.Forbidden:
-                        pass
+                await self.respond_with_icon(message, '🕦')

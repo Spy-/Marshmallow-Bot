@@ -1,13 +1,12 @@
-import os
-import yaml
 import importlib
-from marshmallow.core.mechanics.logger import create_logger
+import os
+
+import yaml
+
 from marshmallow.core.mechanics.command import MarshmallowCommand
 from marshmallow.core.mechanics.event import MarshmallowEvent
+from marshmallow.core.mechanics.logger import create_logger
 
-'''
-    Manges all modules. Will load up modules and their respective commands into the bot
-'''
 
 class PluginManager(object):
     def __init__(self, bot, init):
@@ -30,7 +29,7 @@ class PluginManager(object):
         self.commands = {}
         self.events = {}
         directory = 'marshmallow/plugins'
-        for root, dirs, files in os.walk(directory):  
+        for root, dirs, files in os.walk(directory):
             for file in files:
                 if file == 'module.yml':
                     file_path = (os.path.join(root, file))
@@ -38,12 +37,10 @@ class PluginManager(object):
                         plugin_data = yaml.safe_load(plugin_file)
                         if plugin_data['enabled']:
                             if self.init:
-                                self.log.info(
-                                    f'Loading the {plugin_data["name"]} Module')
+                                self.log.info(f'Loading the {plugin_data["name"]} Module')
                             if 'commands' in plugin_data:
                                 if plugin_data['category'] not in self.categories:
-                                    self.categories.append(
-                                        plugin_data['category'])
+                                    self.categories.append(plugin_data['category'])
                                 for command_data in plugin_data['commands']:
                                     if self.bot.cfg.pref.music_only:
                                         if plugin_data['category'] == 'music':
@@ -59,48 +56,32 @@ class PluginManager(object):
                                         add_cmd = True
                                     if add_cmd:
                                         if command_data['enabled']:
-                                            module_root_location = os.path.join(
-                                                root)
-                                            command_module_location = os.path.join(
-                                                root, command_data["name"])
-                                            command_module_location = command_module_location.replace(
-                                                '/', '.')
-                                            command_module_location = command_module_location.replace(
-                                                '\\', '.')
-                                            command_function = importlib.import_module(
-                                                command_module_location)
+                                            module_root_location = os.path.join(root)
+                                            command_module_location = os.path.join(root, command_data["name"])
+                                            command_module_location = command_module_location.replace('/', '.')
+                                            command_module_location = command_module_location.replace('\\', '.')
+                                            command_function = importlib.import_module(command_module_location)
                                             importlib.reload(command_function)
-                                            command_data.update(
-                                                {'path': module_root_location})
-                                            command = MarshmallowCommand(
-                                                self.bot, command_function, plugin_data, command_data)
-                                            if command.alts:
-                                                for alt in command.alts:
-                                                    self.alts.update(
-                                                        {alt: command.name})
-                                            self.commands.update(
-                                                {command_data['name']: command})
+                                            command_data.update({'path': module_root_location})
+                                            cmd = MarshmallowCommand(self.bot, command_function, plugin_data, command_data)
+                                            if cmd.alts:
+                                                for alt in cmd.alts:
+                                                    self.alts.update({alt: cmd.name})
+                                            self.commands.update({command_data['name']: cmd})
                             if self.bot.cfg.dsc.bot:
                                 if not self.bot.cfg.pref.music_only:
                                     if 'events' in plugin_data:
                                         for event_data in plugin_data['events']:
                                             if event_data['enabled']:
-                                                command_module_location = os.path.join(
-                                                    root, event_data["name"])
-                                                command_module_location = command_module_location.replace(
-                                                    '/', '.')
-                                                command_module_location = command_module_location.replace(
-                                                    '\\', '.')
-                                                event_function = importlib.import_module(
-                                                    command_module_location)
-                                                importlib.reload(
-                                                    event_function)
-                                                event = MarshmallowEvent(
-                                                    self.bot, event_function, plugin_data, event_data)
+                                                command_module_location = os.path.join(root, event_data["name"])
+                                                command_module_location = command_module_location.replace('/', '.')
+                                                command_module_location = command_module_location.replace('\\', '.')
+                                                event_function = importlib.import_module(command_module_location)
+                                                importlib.reload(event_function)
+                                                event = MarshmallowEvent(self.bot, event_function, plugin_data, event_data)
                                                 if event.event_type in self.events:
                                                     event_list = self.events[event.event_type]
                                                 else:
                                                     event_list = []
                                                 event_list.append(event)
-                                                self.events.update(
-                                                    {event.event_type: event_list})
+                                                self.events.update({event.event_type: event_list})
