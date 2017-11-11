@@ -1,7 +1,7 @@
 import discord
 import datetime
 from marshmallow.core.utilities.data_processing import user_avatar
-
+from marshmallow.core.utilities.constants import *
 
 async def nowplaying(cmd, message, args):
     if message.guild.id in cmd.bot.music.currents:
@@ -14,5 +14,5 @@ async def nowplaying(cmd, message, args):
         response.set_author(name=author, icon_url=user_avatar(item.requester), url=item.url)
         response.set_footer(text=f'Duration: {duration} | Tip: The author\'s name is a link.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ No currently playing song data.')
+        response = discord.Embed(color=ERROR, title='❗ No currently playing song data.')
     await message.channel.send(embed=response)

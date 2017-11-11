@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def repeat(cmd, message, args):
     if message.guild.voice_client:
@@ -12,9 +12,9 @@ async def repeat(cmd, message, args):
                     cmd.bot.music.repeaters.append(message.guild.id)
                     response = discord.Embed(color=0x3B88C3, title=f'🔁 The queue will now repeat.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ You are not in my channel.')
+                response = discord.Embed(color=ERROR, title='❗ You are not in my channel.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.')
+            response = discord.Embed(color=ERROR, title='❗ You are not in a voice channel.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ I am not playing anything.')
+        response = discord.Embed(color=ERROR, title='❗ I am not playing anything.')
     await message.channel.send(embed=response)

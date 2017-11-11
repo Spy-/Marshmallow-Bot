@@ -5,7 +5,7 @@ from humanfriendly.tables import format_pretty_table as boop
 
 from marshmallow.core.mechanics.music import QueueItem
 from marshmallow.core.utilities.data_processing import user_avatar
-
+from marshmallow.core.utilities.constants import *
 
 async def queue(cmd, message, args):
     if args:
@@ -74,11 +74,11 @@ async def queue(cmd, message, args):
                     await init_res_msg.edit(embed=final_resp)
             else:
                 if not args:
-                    response = discord.Embed(color=0xBE1931, title='❗ You are not in my voice channel.')
+                    response = discord.Embed(color=ERROR, title='❗ You are not in my voice channel.')
                     await message.channel.send(embed=response)
         else:
             if not args:
-                response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.')
+                response = discord.Embed(color=ERROR, title='❗ You are not in a voice channel.')
                 await message.channel.send(embed=response)
     else:
         music_queue = cmd.bot.music.get_queue(message.guild.id)

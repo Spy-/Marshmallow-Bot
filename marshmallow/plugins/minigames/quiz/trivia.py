@@ -7,6 +7,7 @@ import discord
 import ftfy
 
 from marshmallow.core.utilities.data_processing import user_avatar
+from marshmallow.core.utilities.constants import *
 
 ongoing_list = []
 trivia_cache = []
@@ -123,7 +124,7 @@ async def trivia(cmd, message, args):
             if message.author.id in ongoing_list:
                 ongoing_list.remove(message.author.id)
         else:
-            ongoing_error = discord.Embed(color=0xBE1931, title='❗ There is one already ongoing.')
+            ongoing_error = discord.Embed(color=ERROR, title='❗ There is one already ongoing.')
             await message.channel.send(embed=ongoing_error)
     else:
         timeout = cmd.bot.cool_down.get_cooldown(cmd.name, message.author)

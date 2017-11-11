@@ -5,6 +5,7 @@ import aiohttp
 import discord
 
 from .mech.utils import scramble
+from marshmallow.core.utilities.constants import *
 
 ongoing_list = []
 
@@ -61,5 +62,5 @@ async def unscramble(cmd, message, args):
         if message.channel.id in ongoing_list:
             ongoing_list.remove(message.channel.id)
     else:
-        ongoing_error = discord.Embed(color=0xBE1931, title='❗ There is one already ongoing.')
+        ongoing_error = discord.Embed(color=ERROR, title='❗ There is one already ongoing.')
         await message.channel.send(embed=ongoing_error)

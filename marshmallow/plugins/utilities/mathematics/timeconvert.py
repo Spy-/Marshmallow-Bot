@@ -1,6 +1,6 @@
 import arrow
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def timeconvert(cmd, message, args):
     if args:
@@ -17,9 +17,9 @@ async def timeconvert(cmd, message, args):
                 time_out = to_arrow.format('YYYY-MM-DD HH:mm:ss (ZZ GMT)')
                 response = discord.Embed(color=0x696969, title=f'🕥 {time_out}')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ Invalid first argument.')
+                response = discord.Embed(color=ERROR, title='❗ Invalid first argument.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Invalid input arguments.')
+            response = discord.Embed(color=ERROR, title='❗ Invalid input arguments.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
+        response = discord.Embed(color=ERROR, title='❗ Nothing inputted.')
     await message.channel.send(embed=response)

@@ -1,7 +1,7 @@
 import os
 import discord
 from PIL import Image
-
+from marshmallow.core.utilities.constants import *
 
 async def color(cmd, message, args):
     if args:
@@ -16,9 +16,9 @@ async def color(cmd, message, args):
                     image = Image.new('RGB', (128, 128), color_tupple)
                     image.save(f'cache/{message.id}.png')
                 except ValueError:
-                    response = discord.Embed(color=0xBE1931, title='❗ Something here is not a number.')
+                    response = discord.Embed(color=ERROR, title='❗ Something here is not a number.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ Invalid HEX color code.')
+                response = discord.Embed(color=ERROR, title='❗ Invalid HEX color code.')
         elif len(args) == 3:
             try:
                 color_tupple = (int(args[0]), int(args[1]), int(args[2]))
@@ -26,11 +26,11 @@ async def color(cmd, message, args):
                 image = Image.new('RGB', (128, 128), color_tupple)
                 image.save(f'cache/{message.id}.png')
             except ValueError:
-                response = discord.Embed(color=0xBE1931, title='❗ Something here is not a number.')
+                response = discord.Embed(color=ERROR, title='❗ Something here is not a number.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Invalid input, HEX or RGB sequence, please.')
+            response = discord.Embed(color=ERROR, title='❗ Invalid input, HEX or RGB sequence, please.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
+        response = discord.Embed(color=ERROR, title='❗ Nothing inputted.')
     if response:
         await message.channel.send(embed=response)
     else:

@@ -1,12 +1,12 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def geterror(cmd, message, args):
     if args:
         token = args[0]
         error_file = cmd.db[cmd.bot.cfg.db.database].Errors.find_one({'Token': token})
         if error_file:
-            response = discord.Embed(color=0xBE1931, title=f'🚨 Error: `{token}`')
+            response = discord.Embed(color=ERROR, title=f'🚨 Error: `{token}`')
             cmd_text = f'Command: **{error_file["Message"]["Command"]}**'
             cmd_text += f'\nID: **{error_file["Message"]["ID"]}**'
             cmd_text += f'\nArguments: **{" ".join(error_file["Message"]["Arguments"]) or "None"}**'
@@ -22,10 +22,10 @@ async def geterror(cmd, message, args):
             response.add_field(name='Origin', value=orgn_text)
         else:
             trace_text = None
-            response = discord.Embed(color=0xBE1931, title='❗ No error with that token was found.')
+            response = discord.Embed(color=ERROR, title='❗ No error with that token was found.')
     else:
         trace_text = None
-        response = discord.Embed(color=0xBE1931, title='❗ No token inputted.')
+        response = discord.Embed(color=ERROR, title='❗ No token inputted.')
     await message.channel.send(embed=response)
     if trace_text:
         await message.channel.send(trace_text)

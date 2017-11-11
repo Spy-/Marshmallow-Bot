@@ -1,5 +1,6 @@
 import secrets
 import discord
+from marshmallow.core.utilities.constants import *
 
 
 async def roll(cmd, message, args):
@@ -31,9 +32,9 @@ async def roll(cmd, message, args):
                 response = discord.Embed(color=0xea5963)
                 response.add_field(name='🎲 You Rolled', value=roll_out)
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ The high end must be positive and not a zero.')
+                response = discord.Embed(color=ERROR, title='❗ The high end must be positive and not a zero.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Maximum number allowed is 999999999999.')
+            response = discord.Embed(color=ERROR, title='❗ Maximum number allowed is 999999999999.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ Up to 10 dice please.')
+        response = discord.Embed(color=ERROR, title='❗ Up to 10 dice please.')
     await message.channel.send(None, embed=response)

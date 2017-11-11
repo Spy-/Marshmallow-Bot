@@ -5,7 +5,7 @@ import discord
 
 from marshmallow.core.utilities.data_processing import user_avatar
 from marshmallow.core.utilities.stats_processing import add_special_stats
-
+from marshmallow.core.utilities.constants import *
 
 def player_listening(voice_client):
     user_count = 0
@@ -80,9 +80,9 @@ async def play(cmd, message, args):
                     if message.guild.id in cmd.bot.music.queues:
                         del cmd.bot.music.queues[message.guild.id]
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ The queue is empty.')
+                response = discord.Embed(color=ERROR, title='❗ The queue is empty.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Channel miss-match prevented me from playing.')
+            response = discord.Embed(color=ERROR, title='❗ Channel miss-match prevented me from playing.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.')
+        response = discord.Embed(color=ERROR, title='❗ You are not in a voice channel.')
     await message.channel.send(embed=response)

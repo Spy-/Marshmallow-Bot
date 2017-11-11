@@ -1,9 +1,10 @@
 import discord
+from marshmallow.core.utilities.constants import *
 
 
 async def award(cmd, message, args):
     if not message.author.permissions_in(message.channel).manage_guild:
-        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=0xBE1931)
+        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=ERROR)
     else:
         if args:
             if len(args) == 2:
@@ -30,11 +31,11 @@ async def award(cmd, message, args):
                         else:
                             response = discord.Embed(color=0xa7d28b, title=f'💸 Not enough {currency} in the Vault.')
                     else:
-                        response = discord.Embed(color=0xBE1931, title='❗ No user targeted.')
+                        response = discord.Embed(color=ERROR, title='❗ No user targeted.')
                 else:
-                    response = discord.Embed(color=0xBE1931, title='❗ Invalid amount.')
+                    response = discord.Embed(color=ERROR, title='❗ Invalid amount.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ Invalid arguments.')
+                response = discord.Embed(color=ERROR, title='❗ Invalid arguments.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Nothing inputed.')
+            response = discord.Embed(color=ERROR, title='❗ Nothing inputed.')
     await message.channel.send(embed=response)

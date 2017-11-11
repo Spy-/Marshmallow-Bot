@@ -1,7 +1,7 @@
 import json
 import aiohttp
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def shortenurl(cmd, message, args):
     await message.channel.send('This hasn\'t been implemented yet')
@@ -32,11 +32,11 @@ async def shortenurl(cmd, message, args):
                     response = discord.Embed(color=0x66CC66)
                     response.add_field(name='✅ URL Shortened', value=short_url)
             elif status_code == 500:
-                response = discord.Embed(color=0xBE1931, title='❗ Bad URL.')
+                response = discord.Embed(color=ERROR, title='❗ Bad URL.')
             else:
-                response = discord.Embed(color=0xBE1931, title=f'❗ Error {status_code} - {data["status_txt"]} occurred.')
+                response = discord.Embed(color=ERROR, title=f'❗ Error {status_code} - {data["status_txt"]} occurred.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
+            response = discord.Embed(color=ERROR, title='❗ Nothing inputted.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ No Bit.ly Access Token.')
+        response = discord.Embed(color=ERROR, title='❗ No Bit.ly Access Token.')
     await message.channel.send(text_cont, embed=response) '''

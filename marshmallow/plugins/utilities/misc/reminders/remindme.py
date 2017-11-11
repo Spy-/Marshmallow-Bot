@@ -4,7 +4,7 @@ import arrow
 import discord
 
 from marshmallow.core.utilities.data_processing import user_avatar
-
+from marshmallow.core.utilities.constants import *
 
 def convert_to_seconds(time_input):
     indent_list = time_input.split(':')
@@ -55,13 +55,13 @@ async def remindme(cmd, message, args):
                     response.set_author(name=f'Reminder {reminder_id} Created', icon_url=user_avatar(message.author))
                     response.set_footer(text=f'Executes: {time_diff.title()}')
                 else:
-                    response = discord.Embed(color=0xBE1931, title='❗ You already have 15 reminders pending.')
+                    response = discord.Embed(color=ERROR, title='❗ You already have 15 reminders pending.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ Reminders have a limit of 90 days.')
+                response = discord.Embed(color=ERROR, title='❗ Reminders have a limit of 90 days.')
         except LookupError:
-            response = discord.Embed(color=0xBE1931, title='❗ Please use the format HH:MM:SS.')
+            response = discord.Embed(color=ERROR, title='❗ Please use the format HH:MM:SS.')
         except ValueError:
-            response = discord.Embed(color=0xBE1931, title='❗ Inputted value is invalid.')
+            response = discord.Embed(color=ERROR, title='❗ Inputted value is invalid.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ No arguments inputted.')
+        response = discord.Embed(color=ERROR, title='❗ No arguments inputted.')
     await message.channel.send(embed=response)

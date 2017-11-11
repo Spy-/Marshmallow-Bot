@@ -1,6 +1,6 @@
 import discord
 import asyncio
-
+from marshmallow.core.utilities.constants import *
 
 async def volume(cmd, message, args):
     ''' if message.author.voice:
@@ -16,13 +16,13 @@ async def volume(cmd, message, args):
                         cmd.bot.music.set_volume(message.guild.id, _volume / 100)
                         response = discord.Embed(color=0x66CC66, title=f'✅ Volume changed to {_volume}%')
                     else:
-                        response = discord.Embed(color=0xBE1931, title='❗ Volume must be below 200.')
+                        response = discord.Embed(color=ERROR, title='❗ Volume must be below 200.')
                 else:
-                    response = discord.Embed(color=0xBE1931, title='❗ Volume must be above 0.')
+                    response = discord.Embed(color=ERROR, title='❗ Volume must be above 0.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ You are not in my voice channel.')
+            response = discord.Embed(color=ERROR, title='❗ You are not in my voice channel.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.') '''
+        response = discord.Embed(color=ERROR, title='❗ You are not in a voice channel.') '''
 
-    response = discord.Embed(color = 0xBE1931, title='❗ This hasnt been implemented yet. #TODO')    
+    response = discord.Embed(color = ERROR, title='❗ This hasnt been implemented yet. #TODO')    
     await message.channel.send(embed=response)

@@ -31,6 +31,7 @@ Commands | Description | Example
 `?award` `?pay` | Awards a chosen amount of Kud from the vault to a targeted person. The amount of Kud needs to go first, followed by the target. Only server managers can award Kud from the vault. Anybody can contribute to the vault with the givetovault command. | `?award 500 @person`
 `?dog` | Outputs a random dog image. | `?dog`
 `?givetovault` `?givetobank` `?gtv` `?gtb` | The vault is a server specific Kud storage system. Members can contribute to the vault with this command. Adding to the vault taxes 5% of the Kud. The kud can then be awarded to users using the award command. | `?givetovault`
+`?payday` | Gives the player a payday. Usable once an hour. | `?payday`
 `?vault` `?bank` | Shows the current amount of Kud in the guild's vault. | `?vault`
 `?xkcd` | If you like humorous things and know a bit of technology, you will lose a lot of time reading these. XKCD comics are perfect for procrastination and time wasting. | `?xkcd [num]`
 [Back To Top](#module-index)
@@ -39,7 +40,8 @@ Commands | Description | Example
 Commands | Description | Example
 ----------|-------------|--------
 `?commands` `?command` | Shows the commands in a module group category. To view all the module group categories, use the modules command. | `?commands minigames`
-`?help` | Show information about a command if something in inputted. | `?help fish`
+`?help` | Show information about a command if something in inputted. | `?help remindme`
+`?help_all` `?halp` | Remade help command. WIP | `?help_all`
 `?modules` `?module` | Shows all the module categories. | `?modules`
 [Back To Top](#module-index)
 

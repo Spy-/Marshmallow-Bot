@@ -1,6 +1,6 @@
 import arrow
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def roleinformation(cmd, message, args):
     if args:
@@ -17,7 +17,7 @@ async def roleinformation(cmd, message, args):
             response = discord.Embed(color=role.color)
             response.add_field(name=f'{role.name} Information', value=desc_text)
         else:
-            response = discord.Embed(color=0xBE1931, title=f'❗ No {role_lookup} role found.')
+            response = discord.Embed(color=ERROR, title=f'❗ No {role_lookup} role found.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
+        response = discord.Embed(color=ERROR, title='❗ Nothing inputted.')
     await message.channel.send(embed=response)

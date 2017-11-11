@@ -1,4 +1,5 @@
 import discord
+from marshmallow.core.utilities.constants import *
 
 
 class GlobalCommandPermissions(object):
@@ -101,11 +102,11 @@ class GlobalCommandPermissions(object):
         elif self.black_user:
             return
         elif self.dm_denied:
-            color = 0xBE1931
+            color = ERROR
             title = f'⛔ Can\'t Be Used In Direct Messages'
             desc = f'Please use {self.bot.get_prefix(self.message)}{self.cmd.name} on a server where I am present.'
         elif self.owner_denied:
-            color = 0xBE1931
+            color = ERROR
             title = '⛔ Bot Owner Only'
             desc = f'I\'m sorry {self.message.author.display_name}. I\'m afraid I can\'t let you do that.'
         elif self.nsfw_denied:

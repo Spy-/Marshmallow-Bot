@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 import discord
 import ftfy
 import markovify
-
+from marshmallow.core.utilities.constants import *
 from marshmallow.core.utilities.data_processing import user_avatar
 
 threads = ThreadPoolExecutor(max_workers=2)
@@ -32,7 +32,7 @@ async def impersonate(cmd, message, args):
                 task = cmd.bot.loop.run_in_executor(threads, chain_function)
                 sentence = await task
                 if not sentence:
-                    response = discord.Embed(color=0xBE1931, title='😖 I could not think of anything...')
+                    response = discord.Embed(color=ERROR, title='😖 I could not think of anything...')
                 else:
                     sentence = ftfy.fix_text(sentence)
                     response = discord.Embed(color=0xbdddf4)
@@ -46,7 +46,7 @@ async def impersonate(cmd, message, args):
                 response.add_field(name=title, value=value)
             await init_message.edit(embed=response)
         else:
-            no_target = discord.Embed(color=0xBE1931, title='❗ No user targeted.')
+            no_target = discord.Embed(color=ERROR, title='❗ No user targeted.')
             await message.channel.send(embed=no_target)
     else:
         timeout = cmd.bot.cool_down.get_cooldown(cmd.name, message.author)

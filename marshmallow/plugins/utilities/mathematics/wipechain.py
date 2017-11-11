@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def wipechain(cmd, message, args):
     uid = message.author.id
@@ -9,5 +9,5 @@ async def wipechain(cmd, message, args):
         cmd.db[cmd.db.db_cfg.database].MarkovChains.delete_one({'UserID': uid})
         response = discord.Embed(color=0x66CC66, title=f'✅ Your chain of {chain_len} items has been wiped.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You don\'t have a Markov Chain.')
+        response = discord.Embed(color=ERROR, title='❗ You don\'t have a Markov Chain.')
     await message.channel.send(embed=response)

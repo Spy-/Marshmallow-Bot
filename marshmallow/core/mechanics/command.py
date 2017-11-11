@@ -10,6 +10,7 @@ from marshmallow.core.mechanics.logger import create_logger
 from marshmallow.core.mechanics.permissions import GlobalCommandPermissions
 from marshmallow.core.mechanics.permissions import ServerCommandPermissions
 from marshmallow.core.utilities.stats_processing import add_cmd_stat
+from marshmallow.core.utilities.constants import *
 
 
 class MarshmallowCommand(object):
@@ -201,7 +202,7 @@ class MarshmallowCommand(object):
                                 err_text += '\nPlease send this token to our support server.'
                                 err_text += f'\nThe invite link is in the **{prefix}help** command.'
                                 err_text += f'\nToken: **{err_token}**'
-                                error_embed = discord.Embed(color=0xBE1931)
+                                error_embed = discord.Embed(color=ERROR)
                                 error_embed.add_field(name=title, value=err_text)
                                 try:
                                     await message.channel.send(embed=error_embed)
@@ -209,7 +210,7 @@ class MarshmallowCommand(object):
                                     pass
                         else:
                             await self.respond_with_icon(message, '❗')
-                            reqs_embed = discord.Embed(color=0xBE1931)
+                            reqs_embed = discord.Embed(color=ERROR)
                             reqs_error_title = f'❗ I am missing permissions!'
                             reqs_error_list = ''
                             for req in requirements.missing_list:

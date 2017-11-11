@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def givetovault(cmd, message, args):
     if args:
@@ -23,7 +23,7 @@ async def givetovault(cmd, message, args):
             else:
                 response = discord.Embed(color=0xa7d28b, title=f'💸 You don\'t have enough {currency}.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Invalid amount.')
+            response = discord.Embed(color=ERROR, title='❗ Invalid amount.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You didn\'t input an amount.')
+        response = discord.Embed(color=ERROR, title='❗ You didn\'t input an amount.')
     await message.channel.send(embed=response)

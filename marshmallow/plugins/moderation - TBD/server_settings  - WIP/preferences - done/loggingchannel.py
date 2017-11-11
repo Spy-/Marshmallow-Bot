@@ -1,9 +1,9 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def loggingchannel(cmd, message, args):
     if not message.author.permissions_in(message.channel).manage_guild:
-        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=0xBE1931)
+        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=ERROR)
     else:
         if message.channel_mentions:
             target_chn = message.channel_mentions[0]
@@ -24,7 +24,7 @@ async def loggingchannel(cmd, message, args):
                 cmd.db.set_guild_settings(message.guild.id, 'LoggingChannel', target_chn.id)
                 response = discord.Embed(color=0x77B255, title=f'✅ #{target_chn.name} set as the logging channel.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ I can\'t write to that channel.')
+                response = discord.Embed(color=ERROR, title='❗ I can\'t write to that channel.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ No channel tagged.')
+            response = discord.Embed(color=ERROR, title='❗ No channel tagged.')
     await message.channel.send(embed=response)

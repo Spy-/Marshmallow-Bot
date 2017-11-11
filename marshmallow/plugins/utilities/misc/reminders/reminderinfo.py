@@ -2,7 +2,7 @@ import arrow
 import discord
 
 from marshmallow.core.utilities.data_processing import user_avatar
-
+from marshmallow.core.utilities.constants import *
 
 async def reminderinfo(cmd, message, args):
     if args:
@@ -30,5 +30,5 @@ async def reminderinfo(cmd, message, args):
         else:
             response = discord.Embed(color=0x696969, title=f'🔍 Reminder `{rem_id}` not found.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ No reminder ID inputted.')
+        response = discord.Embed(color=ERROR, title='❗ No reminder ID inputted.')
     await message.channel.send(embed=response)

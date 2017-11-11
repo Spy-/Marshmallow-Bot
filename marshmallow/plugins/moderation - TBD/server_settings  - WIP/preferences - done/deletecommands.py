@@ -1,6 +1,6 @@
 
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def deletecommands(cmd, message, args):
     if message.author.permissions_in(message.channel).manage_guild:
@@ -15,5 +15,5 @@ async def deletecommands(cmd, message, args):
             ending = 'enabled'
         response = discord.Embed(color=0x77B255, title=f'✅ Command message deletion has been {ending}.')
     else:
-        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=0xBE1931)
+        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=ERROR)
     await message.channel.send(embed=response)

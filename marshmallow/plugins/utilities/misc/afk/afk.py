@@ -1,13 +1,13 @@
 import arrow
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def afk(cmd, message, args):
     afk_data = cmd.db[cmd.db.db_cfg.database]['AwayUsers'].find_one(
         {'UserID': message.author.id})
     if afk_data:
         response = discord.Embed(
-            color=0xBE1931, title='❗ You are already marked as AFK.')
+            color=ERROR, title='❗ You are already marked as AFK.')
     else:
         if args:
             afk_reason = ' '.join(args)

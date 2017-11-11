@@ -4,7 +4,7 @@ from asyncio.queues import Queue
 import discord
 
 from marshmallow.core.utilities.data_processing import user_avatar
-
+from marshmallow.core.utilities.constants import *
 
 async def shuffle(cmd, message, args):
     if message.author.voice:
@@ -26,11 +26,11 @@ async def shuffle(cmd, message, args):
                     requester = f'{message.author.name}#{message.author.discriminator}'
                     response.set_author(name=requester, icon_url=user_avatar(message.author))
                 else:
-                    response = discord.Embed(color=0xBE1931, title='❗ The queue is empty.')
+                    response = discord.Embed(color=ERROR, title='❗ The queue is empty.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ I am not connected to any channel.')
+                response = discord.Embed(color=ERROR, title='❗ I am not connected to any channel.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ You are not in my voice channel.')
+            response = discord.Embed(color=ERROR, title='❗ You are not in my voice channel.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.')
+        response = discord.Embed(color=ERROR, title='❗ You are not in a voice channel.')
     await message.channel.send(embed=response)

@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def unflip(cmd, message, args):
     if message.author.permissions_in(message.channel).manage_guild:
@@ -17,5 +17,5 @@ async def unflip(cmd, message, args):
             response_title = f'✅ Table unflipping has been **enabled**.'
             response = discord.Embed(color=0x77B255, title=response_title)
     else:
-        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=0xBE1931)
+        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=ERROR)
     await message.channel.send(embed=response)

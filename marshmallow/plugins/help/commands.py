@@ -1,4 +1,5 @@
 import discord
+from marshmallow.core.utilities.constants import *
 
 
 async def commands(cmd, message, args):
@@ -26,5 +27,5 @@ async def commands(cmd, message, args):
             response = discord.Embed(color=0x696969, title='🔍 Nothing was found...')
     else:
         pfx = cmd.bot.get_prefix(message)
-        response = discord.Embed(color=0xBE1931, title=f'❗ Please input a module from {pfx}modules.')
+        response = discord.Embed(color=ERROR, title=f'❗ Please input a module from {pfx}modules.')
     await message.channel.send(embed=response)

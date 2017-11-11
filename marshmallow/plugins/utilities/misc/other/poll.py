@@ -2,11 +2,11 @@
 import secrets
 
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def poll(cmd, message, args):
     if not args:
-        out_content = discord.Embed(type='rich', color=0xBE1931,
+        out_content = discord.Embed(type='rich', color=ERROR,
                                     title='❗ Missing Arguments.')
         await message.channel.send(None, embed=out_content)
         return
@@ -19,12 +19,12 @@ async def poll(cmd, message, args):
         choice_qry = choice_qry[:-1]
     poll_choices = choice_qry.split('; ')
     if len(poll_choices) < 2:
-        out_content = discord.Embed(type='rich', color=0xBE1931,
+        out_content = discord.Embed(type='rich', color=ERROR,
                                     title='❗ Not enough arguments present.')
         await message.channel.send(None, embed=out_content)
         return
     if len(poll_choices) > 9:
-        out_content = discord.Embed(type='rich', color=0xBE1931,
+        out_content = discord.Embed(type='rich', color=ERROR,
                                     title='❗ Maximum is 9 choices.')
         await message.channel.send(None, embed=out_content)
         return

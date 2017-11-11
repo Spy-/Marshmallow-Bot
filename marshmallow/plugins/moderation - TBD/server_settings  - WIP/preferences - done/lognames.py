@@ -1,9 +1,9 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def lognames(cmd, message, args):
     if not message.author.permissions_in(message.channel).manage_guild:
-        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=0xBE1931)
+        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=ERROR)
     else:
         log_edits = cmd.db.get_guild_settings(message.guild.id, 'LogNames')
         if log_edits:

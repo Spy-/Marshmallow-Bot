@@ -1,7 +1,7 @@
 import json
 
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def httpstatus(cmd, message, args):
     if args:
@@ -16,7 +16,7 @@ async def httpstatus(cmd, message, args):
             response = discord.Embed(color=0x3B88C3)
             response.add_field(name=f'🌐 {status_id}: {status_message}', value=f'{status_description}.')
         else:
-            response = discord.Embed(color=0xBE1931, title='❗ Invalid status code.')
+            response = discord.Embed(color=ERROR, title='❗ Invalid status code.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
+        response = discord.Embed(color=ERROR, title='❗ Nothing inputted.')
     await message.channel.send(embed=response)

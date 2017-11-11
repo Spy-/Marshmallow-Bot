@@ -1,6 +1,6 @@
 import aiohttp
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def setavatar(cmd, message, args):
     if args or message.attachments:
@@ -15,7 +15,7 @@ async def setavatar(cmd, message, args):
             await cmd.bot.user.edit(avatar=img_data)
             response = discord.Embed(color=0x77B255, title=f'✅ My avatar has been changed.')
         except Exception:
-            response = discord.Embed(color=0xBE1931, title=f'❗ I was unable to change my avatar.')
+            response = discord.Embed(color=ERROR, title=f'❗ I was unable to change my avatar.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ Give me a link or attach an image, please.')
+        response = discord.Embed(color=ERROR, title='❗ Give me a link or attach an image, please.')
     await message.channel.send(embed=response)

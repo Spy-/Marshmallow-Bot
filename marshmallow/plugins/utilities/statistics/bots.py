@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def bots(cmd, message, args):
     online_bots = []
@@ -15,7 +15,7 @@ async def bots(cmd, message, args):
             else:
                 online_bots.append(name)
     if total_bots == 0:
-        embed = discord.Embed(title='❗ No bots were found on this server.', color=0xBE1931)
+        embed = discord.Embed(title='❗ No bots were found on this server.', color=ERROR)
     else:
         embed = discord.Embed(title='Bot Status on ' + message.guild.name, color=0x1ABC9C)
         embed.add_field(name='Online', value='```\n - ' + '\n - '.join(sorted(online_bots)) + '\n```')

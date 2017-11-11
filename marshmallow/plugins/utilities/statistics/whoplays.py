@@ -1,10 +1,10 @@
 
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def whoplays(cmd, message, args):
     if not args:
-        response = discord.Embed(color=0xBE1931, title='❗ Nothing inputted.')
+        response = discord.Embed(color=ERROR, title='❗ Nothing inputted.')
     else:
         game_title = ' '.join(args)
         gamer_list = ''

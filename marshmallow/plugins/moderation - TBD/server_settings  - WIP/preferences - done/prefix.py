@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def prefix(cmd, message, args):
     if message.author.permissions_in(message.channel).manage_guild:
@@ -16,11 +16,11 @@ async def prefix(cmd, message, args):
                     response_title = f'✅ **{prefix_text}** has been set as the new prefix.'
                     response = discord.Embed(color=0x77B255, title=response_title)
                 else:
-                    response = discord.Embed(color=0xBE1931, title='❗ The current prefix and the new one are the same.')
+                    response = discord.Embed(color=ERROR, title='❗ The current prefix and the new one are the same.')
             else:
-                response = discord.Embed(color=0xBE1931, title='❗ The prefix needs to be at least two character.')
+                response = discord.Embed(color=ERROR, title='❗ The prefix needs to be at least two character.')
         else:
             response = discord.Embed(color=0x3B88C3, title=f'ℹ **{current_prefix}** is the current prefix.')
     else:
-        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=0xBE1931)
+        response = discord.Embed(title='⛔ Access Denied. Manage Server needed.', color=ERROR)
     await message.channel.send(embed=response)

@@ -1,5 +1,5 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def summon(cmd, message, args):
     if message.author.voice:
@@ -13,15 +13,15 @@ async def summon(cmd, message, args):
                         title = f'🚩 Moved to {message.author.voice.channel.name}.'
                         response = discord.Embed(color=0xdd2e44, title=title)
                     else:
-                        response = discord.Embed(color=0xBE1931, title='❗ We are in the same channel.')
+                        response = discord.Embed(color=ERROR, title='❗ We are in the same channel.')
                 else:
                     await message.author.voice.channel.connect()
                     title = f'🚩 Connected to {message.author.voice.channel.name}.'
                     response = discord.Embed(color=0xdd2e44, title=title)
             else:
-                response = discord.Embed(color=0xBE1931, title=f'❗ I am not allowed to speak in {vc.name}.')
+                response = discord.Embed(color=ERROR, title=f'❗ I am not allowed to speak in {vc.name}.')
         else:
-            response = discord.Embed(color=0xBE1931, title=f'❗ I am not allowed to connect to {vc.name}.')
+            response = discord.Embed(color=ERROR, title=f'❗ I am not allowed to connect to {vc.name}.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.')
+        response = discord.Embed(color=ERROR, title='❗ You are not in a voice channel.')
     await message.channel.send(embed=response)

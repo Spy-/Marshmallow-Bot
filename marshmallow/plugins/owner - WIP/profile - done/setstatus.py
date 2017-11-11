@@ -1,9 +1,9 @@
 import discord
-
+from marshmallow.core.utilities.constants import *
 
 async def setstatus(cmd, message, args):
     if cmd.bot.cfg.pref.status_rotation:
-        response = discord.Embed(color=0xBE1931, title='❗ I can\'t, automatic rotation is enabled.')
+        response = discord.Embed(color=ERROR, title='❗ I can\'t, automatic rotation is enabled.')
     else:
         status = ' '.join(args)
         game = discord.Game(name=status)
