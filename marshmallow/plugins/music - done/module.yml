@@ -2,6 +2,12 @@ name: Music
 category: music
 enabled: true
 commands:
+  - name: volume
+    alts:
+      - vol
+    enabled: true
+    usage: '{pfx}{cmd} 50'
+    description: Changes the volume of the bot.
   - name: queue
     alts:
       - add
@@ -40,8 +46,8 @@ commands:
     enabled: true
     usage: '{pfx}{cmd}'
     description: >-
-      Overrides the current music player in instances where marshmallow is stuck in a
-      channel. This will not purge the queue, just disconnect the bot.
+      Overrides the current music player in instances where marshmallow is stuck
+      in a channel. This will not purge the queue, just disconnect the bot.
   - name: summon
     alts:
       - move

@@ -3,7 +3,7 @@ import asyncio
 
 
 async def volume(cmd, message, args):
-    if message.author.voice:
+    ''' if message.author.voice:
         same_bound = True
         if message.guild.voice_client:
             if message.guild.voice_client.channel.id != message.author.voice.channel.id:
@@ -22,7 +22,7 @@ async def volume(cmd, message, args):
         else:
             response = discord.Embed(color=0xBE1931, title='❗ You are not in my voice channel.')
     else:
-        response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.')
+        response = discord.Embed(color=0xBE1931, title='❗ You are not in a voice channel.') '''
 
-    #response = discord.Embed(color = 0xBE1931, title='❗ This hasnt been implemented yet. #TODO')    
+    response = discord.Embed(color = 0xBE1931, title='❗ This hasnt been implemented yet. #TODO')    
     await message.channel.send(embed=response)
