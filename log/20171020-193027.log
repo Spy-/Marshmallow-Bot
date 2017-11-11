@@ -1,9 +1,0 @@
-INFO     2017-10-20 19:30:27,631 Marshmallow          Logger Created
-INFO     2017-10-20 19:30:27,631 Marshmallow          ---------------------------------
-INFO     2017-10-20 19:30:27,631 Marshmallow          Loading Configuration...
-INFO     2017-10-20 19:30:27,631 Marshmallow          Running as a Bot: True
-INFO     2017-10-20 19:30:27,631 Marshmallow          Default Bot Prefix: ?
-INFO     2017-10-20 19:30:27,631 Marshmallow          Core Configuration Data Loaded
-INFO     2017-10-20 19:30:27,632 Marshmallow          ---------------------------------
-INFO     2017-10-20 19:30:27,632 Marshmallow          ---------------------------------
-INFO     2017-10-20 19:30:27,632 Marshmallow          Loading Cooldown Control...
