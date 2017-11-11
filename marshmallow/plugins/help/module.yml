@@ -32,13 +32,6 @@ commands:
     description: >-
       Shows the commands in a module group category. To view all the module
       group categories, use the modules command.
-  - name: help_all
-    global: true
-    enabled: true
-    alts:
-      - halp
-    usage: '{pfx}{cmd}'
-    description: Remade help command. WIP
 events:
   - name: dm_detection
     type: message
