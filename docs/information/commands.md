@@ -41,7 +41,6 @@ Commands | Description | Example
 ----------|-------------|--------
 `?commands` `?command` | Shows the commands in a module group category. To view all the module group categories, use the modules command. | `?commands minigames`
 `?help` | Show information about a command if something in inputted. | `?help remindme`
-`?help_all` `?halp` | Remade help command. WIP | `?help_all`
 `?modules` `?module` | Shows all the module categories. | `?modules`
 [Back To Top](#module-index)
 
