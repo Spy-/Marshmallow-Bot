@@ -92,6 +92,8 @@ Commands | Description | Example
 `?nowplaying` `?currentsong` `?playing` `?np` | Shows information regarding the currently playing song. | `?nowplaying`
 `?pause` | Pauses the music player. | `?pause`
 `?play` `?start` | Starts playing the music queue. | `?play`
+`?playlist` | Playlist interaction | `?playlist`
+`?playlists` | Lists a users playlists | `?playlists`
 `?queue` `?add` | Queues up a song to play from YouTube. Either from a direct URL or text search. Playlists are supported but take a long time to process. | `?queue Kaskade Disarm You Illenium Remix`
 `?repeat` | Toggles if the current queue should be repeated. Whenever a song is played, it's re-added to the end of the queue. | `?repeat`
 `?resume` | Resumes the music player. | `?resume`

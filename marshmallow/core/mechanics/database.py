@@ -314,3 +314,34 @@ class Database(pymongo.MongoClient):
                 output = item
                 break
         return output
+
+    def get_playlist(self, user):
+        """
+        Get's a user's playlists.
+        :param user:
+        :return:
+        """
+        playlists = self[self.db_cfg.database]['Playlists'].find_one({'UserID': user.id})
+        if not playlists:
+            self[self.db_cfg.database]['Playlists'].insert_one({'UserID': user.id, 'Playlists': []})
+            playlists = []
+        else:
+            playlists = playlists['Playlists']
+        return playlists
+
+    def insert_playlist(self, user, playlist):
+        """
+        Inserts a playlist into a user's settings
+        :param user:
+        :param playlist:
+        :return:
+        """
+        lists = self.get_playlist(user)
+        lists.append(playlist)
+        #self.update_inv(user, inv)
+        self[self.db_cfg.database]['Playlists'].update_one(
+            {'UserID': user.id},
+            {
+                '$set': {'Playlists': lists}
+            }
+        )

@@ -45,6 +45,8 @@ commands:
       - killmusic
     enabled: true
     usage: '{pfx}{cmd}'
+    permissions:
+    - owner: true
     description: >-
       Overrides the current music player in instances where marshmallow is stuck
       in a channel. This will not purge the queue, just disconnect the bot.
@@ -88,3 +90,15 @@ commands:
     enabled: true
     usage: '{pfx}{cmd}'
     description: Randomizes the current song queue.
+  - name: playlists
+    enabled: true
+    usage: '{pfx}{cmd}'
+    description: Lists a users playlists
+    permissions:
+      - owner: true
+  - name: playlist
+    enabled: true
+    usage: '{pfx}{cmd}'
+    description: Playlist interaction
+    permissions:
+      - owner: true
