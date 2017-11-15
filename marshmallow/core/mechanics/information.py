@@ -5,7 +5,7 @@ class Information(object):
     def __init__(self):
         self.version = Version()
         self.authors = Authors()
-        self.donors = Donors()
+        #self.donors = Donors()
 
 
 class Version(object):
@@ -39,7 +39,7 @@ class Authors(object):
             self.authors.append(author_object)
 
 
-class Donor(object):
+''' class Donor(object):
     def __init__(self, donor):
         self.name = donor['name']
         self.tier = donor['tier']
@@ -56,4 +56,4 @@ class Donors(object):
         self.donors = []
         for donor in donors_data['donors']:
             donor_object = Donor(donor)
-            self.donors.append(donor_object)
+            self.donors.append(donor_object) '''
