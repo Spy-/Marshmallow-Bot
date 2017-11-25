@@ -39,14 +39,15 @@ class Logger(object):
 
     def __init__(self, name, *, level=None):
         """
-        Sigma Logger:
+        Marshmallow Logger:
         This log module will log to a file at "{project_root}/log" which will be rotated daily.
         Logs will also be written to the Systemd Journal if it's available.
         Otherwise logs will be written to stdout.
         :param name:
         :param level:
         """
-        self.default_fmt = '%(levelname)-8s %(asctime)s %(name)-20s %(message)s'
+
+        self.default_fmt = '[ {levelname:^8s} | {asctime:s} | {name:<25.25s} ] {message:s}'
         self.default_date_fmt = '%Y.%m.%d %H:%M:%S'
         self.name = name
         self._logger = logging.getLogger(self.name)
@@ -103,14 +104,14 @@ class Logger(object):
 
         fmt = fmt or self.default_fmt
         date_fmt = date_fmt or self.default_date_fmt
-        handler.setFormatter(logging.Formatter(fmt, date_fmt))
+        handler.setFormatter(logging.Formatter(fmt=fmt, datefmt=date_fmt, style='{'))
         self._logger.addHandler(handler)
 
     @staticmethod
     def add_journal_handler(logger):
         """Add a log handler that logs to the Systemd journal."""
-        handler = journal.JournaldLogHandler(identifier='sigma')
-        log_fmt = '[%(name)-10s]: %(message)s'
+        handler = journal.JournaldLogHandler(identifier='marshmallow')
+        log_fmt = '[ {levelname:.1s} | {name:<25.25s} ]: {message:s}'
         logger.add_handler(handler, log_fmt)
 
     @staticmethod
@@ -129,6 +130,6 @@ class Logger(object):
         if not os.path.exists(log_dir):
             os.mkdir(log_dir)
 
-        filename = os.path.join(log_dir, 'sigma.log')
+        filename = os.path.join(log_dir, 'marshmallow.log')
         handler = TimedRotatingFileHandler(filename, when='d', interval=1, encoding='utf-8', utc=True)
         logger.add_handler(handler)
