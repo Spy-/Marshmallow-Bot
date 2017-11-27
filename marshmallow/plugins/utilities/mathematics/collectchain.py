@@ -8,7 +8,7 @@ in_use_by = None
 
 
 def check_for_bot_prefixes(prefix, text):
-    common_pfx = [prefix, '!', '/', '\\', '~', '.', '>', '-', '_', '?']
+    common_pfx = [prefix, '!', '/', '\\', '~', '.', '>', '-', '_', '?', ',', '`', '+', '=', '$', '%']
     prefixed = False
     for pfx in common_pfx:
         if text.startswith(pfx):
@@ -43,16 +43,14 @@ async def collectchain(cmd, message, args):
             else:
                 target_chn = message.channel
             collected = 0
-            collection = cmd.db[cmd.db.db_cfg.database]['MarkovChains'].find_one({
-                                                                                 'UserID': target.id})
+            collection = cmd.db[cmd.db.db_cfg.database]['MarkovChains'].find_one({'UserID': target.id})
             if collection:
                 collection = collection['Chain']
             else:
                 collection = []
             in_use = True
             in_use_by = message.author
-            ch_response = discord.Embed(color=0x66CC66,
-                                        title='📖 Collecting... You will be sent a DM when I\'m done.')
+            ch_response = discord.Embed(color=0x66CC66, title='📖 Collecting... You will be sent a DM when I\'m done.')
             await message.channel.send(None, embed=ch_response)
             try:
                 async for log in target_chn.history(limit=100000):
