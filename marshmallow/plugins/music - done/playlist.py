@@ -1,50 +1,36 @@
 import discord
 
-from marshmallow.core.utilities.constants import *
+from marshmallow.core.mechanics.database import Database
 
 async def playlist(cmd, message, args):
 
-    if len(args) >= 1:
-        if args[0].lower() == 'create':
-            create(cmd, message, args[1:])
-        elif args[0].lower() == 'remove':
-            remove(cmd, message, args[1:])
-        elif args[0].lower() == 'play':
-            play(cmd, message, args[1:])
-        elif args[0].lower() == 'edit':
-            edit(cmd, message, args[1:])
-    else:
-        response = 'You must pass a subcommand: `create`, `remove`, `play`, `edit`'
-        await message.channel.send(response)
+    if args:
+        subcommand = args[0].lower()
+
+    if subcommand:
+        args = args[1:]
+
+    if subcommand == 'list':
+        await _list(cmd, message, args)
+    elif subcommand == 'create':
+        await _create(cmd, message, args)
 
 
-def create(cmd, message, args):
-    author = message.author
-    bot = cmd.bot
-    db = cmd.db
-    playlists = cmd.db.get_playlists(author)
+async def _list(cmd, message, args):
+    await message.channel.send(args)
 
-    if args[0]:
-        name = args[0]
-        db.insert_playlist(author, name)
-        response = discord.Embed(color=EXECUTE_GREEN, title=f'Playlist: {name} successfully created.')
-    else:
-        response = discord.Embed(color=ERROR, title='You must give the playlist a name')
+async def _create(cmd, message, args):
+    if args:
+        if args[0]:
+            playlist_name = args[0]
+        if args[1]:
+            playlist_url = args[1]
 
+        playlist = {
+            'name': playlist_name,
+            'url': playlist_url
+        }
 
-def remove(cmd, message, args):
-    author = message.author
-    bot = cmd.bot
-    db = cmd.db
-
-
-def play(cmd, message, args):
-    author = message.author
-    bot = cmd.bot
-    db = cmd.db
-
-
-def edit(cmd, message, args):
-    author = message.author
-    bot = cmd.bot
-    db = cmd.db
+    
+    
+    await message.channel.send(args)

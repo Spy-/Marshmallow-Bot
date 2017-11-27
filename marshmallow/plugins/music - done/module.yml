@@ -90,12 +90,7 @@ commands:
     enabled: true
     usage: '{pfx}{cmd}'
     description: Randomizes the current song queue.
-  - name: playlists
-    enabled: true
-    usage: '{pfx}{cmd}'
-    description: Lists a users playlists
-    permissions:
-      - owner: true
+
   - name: playlist
     enabled: true
     usage: '{pfx}{cmd}'
